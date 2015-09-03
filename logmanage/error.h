@@ -19,6 +19,8 @@
  * 4 system error 系统信息
  * */
 
+#define DEBUG_SERVER
+
 /*当前服务器定义的运行错误信息*/
 #define ERROR_ARGNULL    ("传递的参数不能为空")
 #define ERROR_CRETHREAD  ("创建线程失败")
@@ -27,6 +29,11 @@
 #define ERROR_TRANTYPE   ("强制转换数据失败")
 #define ERROR_SETMODE    ("设置模式失败")
 #define ERROR_PROFUNNULL ("线程的处理函数为空")
+#define ERROR_OUTQUEUE   ("超出队列的最大长度")
+#define ERROR_INSEQUEUE  ("插入元素失败")
+#define ERROR_DELQUEUE   ("删除元素失败")
+#define ERROR_EDITQUEUE  ("修改数据失败")
+#define ERROR_FILEDDB    ("获取结果集字段失败")
 
 #define ERR_TYPETRAN ("强制转换数据失败") //数据转换失败
 #define ERR_UNLOCK ("释放互斥锁失败") //释放互斥锁失败

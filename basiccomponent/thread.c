@@ -174,6 +174,8 @@ int SetCancelMode(int nMode)
 		{
 			return 1;
 		}
+
+		SystemErrorInfor("SetCancelMode-1");
 	}
 	else
 	{
@@ -181,9 +183,9 @@ int SetCancelMode(int nMode)
 		{
 			return 1;
 		}
-	}
 
-	SystemErrorInfor("SetCancelMode");
+		SystemErrorInfor("SetCancelMode-2");
+	}
 	return 0;
 }
 
@@ -230,11 +232,11 @@ Thread *CreateThread(void *(*Fun)(void *), void *pData)
 			return pThread;
 		}
 
-		SystemErrorInfor("CreateThread-3");
+		SystemErrorInfor("CreateThread-2");
 	}
 	else
 	{
-		SystemErrorInfor("CreateThread-2");
+		SystemErrorInfor("CreateThread-3");
 	}
 
 	free(pThread);

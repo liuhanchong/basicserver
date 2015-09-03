@@ -30,7 +30,7 @@ all: basicserver
 basicserver: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: MacOS X C Linker'
-	gcc  -o "basicserver" $(OBJS) $(USER_OBJS) $(LIBS)
+	gcc -Xlinker -L/usr/local/mysql/lib -lmysqlclient -o "basicserver" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 

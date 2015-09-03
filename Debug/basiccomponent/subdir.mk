@@ -4,12 +4,21 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
+../basiccomponent/dbcore.c \
+../basiccomponent/ini.c \
+../basiccomponent/queue.c \
 ../basiccomponent/thread.c 
 
 OBJS += \
+./basiccomponent/dbcore.o \
+./basiccomponent/ini.o \
+./basiccomponent/queue.o \
 ./basiccomponent/thread.o 
 
 C_DEPS += \
+./basiccomponent/dbcore.d \
+./basiccomponent/ini.d \
+./basiccomponent/queue.d \
 ./basiccomponent/thread.d 
 
 

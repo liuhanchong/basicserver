@@ -9,10 +9,12 @@
 
 void DebugInfor(char *pDebug)
 {
+#ifdef DEBUG_SERVER
 	if (pDebug)
 	{
 		printf("Debug: %s!\n", pDebug);
 	}
+#endif
 }
 
 void LogInfor(char *pLog)
