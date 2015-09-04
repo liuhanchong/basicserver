@@ -207,14 +207,14 @@ void *FreeThreadAccess(void *pData)
 	if (GetCurQueueLen(&threadQueue.threadList) > threadQueue.nCoreThreadNumber)
 	{
 		BeginTraveData(&threadQueue.threadList);
-		pThreadNode = (ThreadNode *)pData;
-		tmCurTime = time(NULL);
-		if ((IsResume(pThreadNode->pThread) == 0) && ((tmCurTime - pThreadNode->tmAccessTime) >= threadQueue.nAccOverTime))
-		{
-			ReleaseThreadNode(pThreadNode);
-			DeleteForNode(&threadQueue.threadList, pQueueNode);
-		}
-	EndTraveData();
+			pThreadNode = (ThreadNode *)pData;
+			tmCurTime = time(NULL);
+			if ((IsResume(pThreadNode->pThread) == 0) && ((tmCurTime - pThreadNode->tmAccessTime) >= threadQueue.nAccOverTime))
+			{
+				ReleaseThreadNode(pThreadNode);
+				DeleteForNode(&threadQueue.threadList, pQueueNode);
+			}
+		EndTraveData();
 	}
 
 	UnlockQueue(&threadQueue.threadList);
