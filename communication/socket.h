@@ -18,7 +18,6 @@
 #include "../basiccomponent/queue.h"
 #include "../logmanage/error.h"
 #include "../basiccomponent/ini.h"
-#include "data.h"
 #include "aiox.h"
 
 typedef struct SocketNode
@@ -26,8 +25,6 @@ typedef struct SocketNode
 	struct sockaddr_in sock_addr;
 	int nClientSocket;
 	time_t tmAccDateTime;
-	DataNode data;
-	int nBuffLength;/*初始化的buffer长度*/
 } SocketNode;
 
 typedef struct Socket
@@ -40,11 +37,10 @@ typedef struct Socket
 	Thread *pAccThread;
 	Thread *pOutTimeThread;
 	int nMaxAcceptSocketNumber;
-	int nMaxBufferLength;
-	AioX aio;//保存aio操作信息
+	AioX aiox;
 } Socket;
 
-Socket serverSocket;
+static Socket serverSocket;
 
 /*接口*/
 int Create(int nDomain, int nType, int nProtocol, int nPort, const char *pIp);

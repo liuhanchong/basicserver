@@ -18,4 +18,5 @@ communication \
 logmanage \
 . \
 poolmanage \
+servermanage \
 

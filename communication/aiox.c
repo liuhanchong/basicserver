@@ -8,9 +8,9 @@
 #include "aiox.h"
 #include "socket.h"
 
-int CreateAio(AioX *pAio, int nMaxAioQueueLength, int nLoopSpace)
+int CreateAio(AioX *pAio, int nMaxAioQueueLength, int nLoopSpace, int nMaxBufferLength)
 {
-	if (!pAio || nMaxAioQueueLength < 1)
+	if (!pAio || nMaxAioQueueLength < 1 || nMaxAioQueueLength < 1)
 	{
 		ErrorInfor("CreateAio", ERROR_ARGNULL);
 		return 0;
@@ -23,8 +23,9 @@ int CreateAio(AioX *pAio, int nMaxAioQueueLength, int nLoopSpace)
 		return 0;
 	}
 
+	pAio->nMaxBufferLength   = nMaxBufferLength;
 	pAio->nMaxAioQueueLength = nMaxAioQueueLength;
-	pAio->pEvnetQueue = malloc(nMaxAioQueueLength * sizeof(struct kevent));
+	pAio->pEvnetQueue 	     = malloc(nMaxAioQueueLength * sizeof(struct kevent));
 	if (!pAio->pEvnetQueue)
 	{
 		SystemErrorInfor("CreateAio");
@@ -39,6 +40,15 @@ int CreateAio(AioX *pAio, int nMaxAioQueueLength, int nLoopSpace)
 		ReleaseAio(pAio);
 
 		ErrorInfor("CreateAio", ERROR_CRETHREAD);
+		return 0;
+	}
+
+	/*初始化DATA处理*/
+	if (InitData() == 0)
+	{
+		ReleaseAio(pAio);
+
+		ErrorInfor("CreateAio", ERROR_INITDATA);
 		return 0;
 	}
 
@@ -98,6 +108,12 @@ int ReleaseAio(AioX *pAio)
 		pAio->pEvnetQueue = NULL;
 	}
 
+	/*释放data模块*/
+	if (ReleaseData() == 0)
+	{
+		ErrorInfor("ReleaseAio", ERROR_RELEDATA);
+	}
+
 	if (close(pAio->nAioId) != 0)
 	{
 		SystemErrorInfor("ReleaseAio");
@@ -131,7 +147,7 @@ void *ProcessAio(void *pData)
 		//读取数据
 		if (event.flags & EVFILT_READ)
 		{
-			Read(&event);
+			Read(pAioX->nAioId, pAioX->nMaxBufferLength, &event);
 		}
 		//写数据
 		else if (event.flags & EVFILT_WRITE)
@@ -141,11 +157,12 @@ void *ProcessAio(void *pData)
 		//错误数据
 		else if (event.flags & EV_ERROR)
 		{
+			ErrorInfor("ProcessAio", (char *)event.data);
+
 			if (RemoveEvent(pAioX->nAioId, event.ident, EV_ERROR) == 0)
 			{
 				ErrorInfor("ProcessAio", ERROR_REMEVENT);
 			}
-			ErrorInfor("ProcessAio", (char *)event.data);
 		}
 		else
 		{
@@ -155,69 +172,40 @@ void *ProcessAio(void *pData)
 	return NULL;
 }
 
-int Read(struct kevent *event)
+int Read(int nAioId, int nMaxBufferLength, struct kevent *event)
 {
-	SocketNode *pSocketNode = (SocketNode *)event->udata;
-	if (!pSocketNode)
+	char *pData = (char *)malloc(nMaxBufferLength);
+	if (!pData)
 	{
+		SystemErrorInfor("Read");
 		return 0;
 	}
 
-	int nFd = 0;
-	int nReturn = 0;
-	nFd = event->ident;
+	/*获取信息*/
+	int nDataSize = recv(event->ident, pData, nMaxBufferLength, 0);
 
-	/*获取节点信息*/
-	LockQueue(&serverSocket.socketList);
-
-	if (FindDataIndex(&serverSocket.socketList, pSocketNode) >= 0)
+	//错误信息或对方关闭了套接字
+	if (nDataSize == -1 || nDataSize == 0)
 	{
-		memset(pSocketNode->data.pData, 0, pSocketNode->nBuffLength);
-		pSocketNode->data.nDataSize = recv(nFd, pSocketNode->data.pData, pSocketNode->nBuffLength, 0);
+		SystemErrorInfor("Read-1");
 
-		//读取信息错误
-		if (pSocketNode->data.nDataSize == -1)
+		if (RemoveEvent(nAioId, event->ident, EVFILT_READ) == 0)
 		{
-			SystemErrorInfor("Read");
-
-			if (RemoveEvent(serverSocket.aio.nAioId, nFd, EVFILT_READ) == 0)
-			{
-				ErrorInfor("Read", ERROR_REMEVENT);
-			}
+			ErrorInfor("Read", ERROR_REMEVENT);
 		}
-		//对方关闭了套接字
-		else if (pSocketNode->data.nDataSize == 0)
-		{
-			if (RemoveEvent(serverSocket.aio.nAioId, nFd, EVFILT_READ) == 0)
-			{
-				ErrorInfor("Read", ERROR_DISCONN);
-			}
-		}
-		else
-		{
-			pSocketNode->tmAccDateTime = time(NULL);
-
-			//将获取到的数据保存
-			char *pData = (char *)malloc(pSocketNode->data.nDataSize + 1);
-			if (pData)
-			{
-				/*保存数据*/
-				memcpy(pData, pSocketNode->data.pData, pSocketNode->data.nDataSize);
-				pData[pSocketNode->data.nDataSize] = '\0';
-
-				InsertRecvDataNode(pSocketNode->nClientSocket, pData, pSocketNode->data.nDataSize);
-				nReturn = 1;
-			}
-			else
-			{
-				SystemErrorInfor("Read");
-			}
-		}
+		return 0;
 	}
 
-	UnlockQueue(&serverSocket.socketList);
+	//插入数据
+	SocketNode *pSocketNode = (SocketNode *)event->udata;
+	if (!pSocketNode)
+	{
+		ErrorInfor("Read", ERROR_TRANTYPE);
+	}
+	pSocketNode->tmAccDateTime = time(NULL);
+	InsertRecvDataNode(event->ident, pData, nDataSize);
 
-	return nReturn;
+	return 1;
 }
 
 int Write(struct kevent *event)

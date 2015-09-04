@@ -8,6 +8,7 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
+-include servermanage/subdir.mk
 -include poolmanage/subdir.mk
 -include logmanage/subdir.mk
 -include communication/subdir.mk
