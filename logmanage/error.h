@@ -36,8 +36,13 @@
 #define ERROR_FILEDDB    ("获取结果集字段失败")
 #define ERROR_READDINI 	 ("读取配置文件失败")
 #define ERROR_INITQUEUE  ("初始化队列失败")
-#define ERROR_CREPOOL 	 ("创建线程池失败")
+#define ERROR_CREPOOL 	 ("创建池失败")
 #define ERROR_DBOPEN 	 ("数据库打开失败")
+#define ERROR_CREAIOX 	 ("创建AIO失败")
+#define ERROR_RELPOOL    ("释放池失败")
+#define ERROR_RELQUEUE   ("释放队列失败")
+#define ERROR_REMEVENT   ("删除事件失败")
+#define ERROR_DISCONN  	 ("Socket连接断开")
 
 #define ERR_TYPETRAN ("强制转换数据失败") //数据转换失败
 #define ERR_UNLOCK ("释放互斥锁失败") //释放互斥锁失败

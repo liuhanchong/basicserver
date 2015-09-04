@@ -35,18 +35,16 @@ typedef struct DBConnPool
 	int nAddConnNumber;/*每次增加的链接数*/
 } DBConnPool;
 
-static DBConnPool connPool;
-
 /*接口*/
-int CreateDBConnPool();
-int ReleaseDBConnPool();
-DBConnNode *GetFreeDBConn();/*获取一个空闲连接*/
+int CreateDBConnPool(DBConnPool *pConnPool);
+int ReleaseDBConnPool(DBConnPool *pConnPool);
+DBConnNode *GetFreeDBConn(DBConnPool *pConnPool);/*获取一个空闲连接*/
 int ReleaseAccessDBConn(DBConnNode *pDBConnNode);/*释放一个访问连接*/
 void ReleaseDBConnNode(DBConnNode *pNode);/*释放连接池节点*/
 
 /*私有*/
 void *FreeDBConnAccess(void *pData);/*未访问超时连接*/
-int CreateMulDBConn(int nNumber);
-int InsertDBConn(char *pHost, char *pUser, char *pPasswd, char *pDB, char *pUnixSocket, unsigned long lClientFlag, unsigned int nPort);
+int CreateMulDBConn(DBConnPool *pConnPool, int nNumber);
+int InsertDBConn(DBConnPool *pConnPool, char *pHost, char *pUser, char *pPasswd, char *pDB, char *pUnixSocket, unsigned long lClientFlag, unsigned int nPort);
 
 #endif /* POOLMANAGE_DBCONNPOOL_H_ */

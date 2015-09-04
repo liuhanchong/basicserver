@@ -33,6 +33,7 @@ typedef struct List
 
 /*遍历节点*/
 #define BeginTraveNode(list) \
+		{\
 			int nIndex = 0; \
 			QueueNode *pQueueNode = NULL; \
 			while (nIndex < GetCurQueueLen(list)) \
@@ -44,7 +45,8 @@ typedef struct List
 #define EndTraveNode() \
 				} \
 				nIndex++; \
-			}
+			} \
+		}
 
 /*遍历数据*/
 #define BeginTraveData(list) \

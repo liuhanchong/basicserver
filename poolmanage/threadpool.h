@@ -41,23 +41,21 @@ typedef struct ThreadPool
 	int nExeThreadLoopSpace;/*执行线程的判断间隔*/
 } ThreadPool;
 
-static ThreadPool threadQueue;
-
 /*接口*/
-int CreateThreadPool();
-int ReleaseThreadPool();
-int GetFreeThreadNumber();/*获取空闲线程个数*/
-ThreadNode *GetFreeThread();/*获取一个空闲线程*/
+int CreateThreadPool(ThreadPool *pThreadQueue);
+int ReleaseThreadPool(ThreadPool *pThreadQueue);
+int GetFreeThreadNumber(ThreadPool *pThreadQueue);/*获取空闲线程个数*/
+ThreadNode *GetFreeThread(ThreadPool *pThreadQueue);/*获取一个空闲线程*/
 void ReleaseThreadNode(ThreadNode *pThreadNode);/*释放线程节点*/
-int ExecuteTask(void *(*Fun)(void *), void *pData);/*执行线程*/
-void SetTaskQueueLength(int *pTaskQueueLength);/*设置任务队列的长度，其是动态变化的*/
+int ExecuteTask(ThreadPool *pThreadQueue, void *(*Fun)(void *), void *pData);/*执行线程*/
+void SetTaskQueueLength(ThreadPool *pThreadQueue, int *pTaskQueueLength);/*设置任务队列的长度，其是动态变化的*/
 
 /*私有*/
 void *AddThreadDynamic(void *pData);/*动态的添加线程*/
 void *FreeThreadAccess(void *pData);/*未访问超时线程*/
 void *FreeThreadExecute(void *pData);/*执行超时线程*/
-int CreateMulThread(int nNumber);
-int InsertThread();
+int CreateMulThread(ThreadPool *pThreadQueue, int nNumber);
+int InsertThread(ThreadPool *pThreadQueue);
 void *DefaultThreadFun(void *pData);
 
 #endif /* POOLMANAGE_THREADPOOL_H_ */

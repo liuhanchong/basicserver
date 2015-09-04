@@ -7,8 +7,14 @@
 
 #include "dbconnpool.h"
 
-int CreateDBConnPool()
+int CreateDBConnPool(DBConnPool *pConnPool)
 {
+	if (!pConnPool)
+	{
+		ErrorInfor("CreateDBConnPool", ERROR_ARGNULL);
+		return 0;
+	}
+
 	Ini ini;
 	if (InitIni(&ini, "/Users/liuhanchong/Documents/workspace/comm_server/ini/dbconnpool.ini", 200) != 1)
 	{
@@ -16,31 +22,33 @@ int CreateDBConnPool()
 		return 0;
 	}
 
-	connPool.nMaxConnNumber = GetInt(&ini, "POOLNUMBER", "MaxConnNumber", 99);
-	connPool.nCoreConnNumber = GetInt(&ini, "POOLNUMBER", "CoreConnNumber", 29);
+	pConnPool->nMaxConnNumber = GetInt(&ini, "POOLNUMBER", "MaxConnNumber", 99);
+	pConnPool->nCoreConnNumber = GetInt(&ini, "POOLNUMBER", "CoreConnNumber", 29);
 
-	connPool.nAccOverTime = GetInt(&ini, "ACCOVERTIME", "AccOverTime", 1700);/*连接未使用时间超时*/
-	connPool.nAccConnLoopSpace = GetInt(&ini, "ACCOVERTIME", "AccConnLoopSpace", 500);/*超时访问连接时候的判断间隔*/
+	pConnPool->nAccOverTime = GetInt(&ini, "ACCOVERTIME", "AccOverTime", 1700);/*连接未使用时间超时*/
+	pConnPool->nAccConnLoopSpace = GetInt(&ini, "ACCOVERTIME", "AccConnLoopSpace", 500);/*超时访问连接时候的判断间隔*/
 
-	connPool.nAddConnNumber = GetInt(&ini, "ADDTHREAD", "AddConnNumber", 4);
+	pConnPool->nAddConnNumber = GetInt(&ini, "ADDTHREAD", "AddConnNumber", 4);
 
 	ReleaseIni(&ini);
 
-	if (InitQueue(&connPool.dbConnList, connPool.nMaxConnNumber, 0) == 0)
+	if (InitQueue(&pConnPool->dbConnList, pConnPool->nMaxConnNumber, 0) == 0)
 	{
 		ErrorInfor("CreateDBConnPool", ERROR_INITQUEUE);
 		return 0;
 	}
 
-	if (CreateMulDBConn(connPool.nCoreConnNumber) == 0)
+	if (CreateMulDBConn(pConnPool, pConnPool->nCoreConnNumber) == 0)
 	{
+		ReleaseDBConnPool(pConnPool);
 		ErrorInfor("CreateDBConnPool", ERROR_CREPOOL);
 		return 0;
 	}
 
-	connPool.pFreeOvertimeConn = CreateLoopThread(FreeDBConnAccess, NULL, connPool.nAccConnLoopSpace);
-	if (!connPool.pFreeOvertimeConn)
+	pConnPool->pFreeOvertimeConn = CreateLoopThread(FreeDBConnAccess, pConnPool, pConnPool->nAccConnLoopSpace);
+	if (!pConnPool->pFreeOvertimeConn)
 	{
+		ReleaseDBConnPool(pConnPool);
 		ErrorInfor("CreateDBConnPool", ERROR_CRETHREAD);
 		return 0;
 	}
@@ -48,35 +56,47 @@ int CreateDBConnPool()
 	return 1;
 }
 
-int ReleaseDBConnPool()
+int ReleaseDBConnPool(DBConnPool *pConnPool)
 {
-	if (connPool.pFreeOvertimeConn)
+	if (!pConnPool)
 	{
-		ReleaseThread(connPool.pFreeOvertimeConn);
+		ErrorInfor("ReleaseDBConnPool", ERROR_ARGNULL);
+		return 0;
 	}
 
-	LockQueue(&connPool.dbConnList);
+	if (pConnPool->pFreeOvertimeConn)
+	{
+		ReleaseThread(pConnPool->pFreeOvertimeConn);
+	}
+
+	LockQueue(&pConnPool->dbConnList);
 
 	/*遍历队列列表*/
-	BeginTraveData(&connPool.dbConnList);
+	BeginTraveData(&pConnPool->dbConnList);
 		ReleaseDBConnNode((DBConnNode *)pData);
 	EndTraveData();
 
-	UnlockQueue(&connPool.dbConnList);
+	UnlockQueue(&pConnPool->dbConnList);
 
-	ReleaseQueue(&connPool.dbConnList);
+	ReleaseQueue(&pConnPool->dbConnList);
 
 	return 1;
 }
 
-DBConnNode *GetFreeDBConn()
+DBConnNode *GetFreeDBConn(DBConnPool *pConnPool)
 {
+	if (!pConnPool)
+	{
+		ErrorInfor("GetFreeDBConn", ERROR_ARGNULL);
+		return 0;
+	}
+
 	/*遍历队列列表*/
 	DBConnNode *pDBConnNode = NULL;
 
-	LockQueue(&connPool.dbConnList);
+	LockQueue(&pConnPool->dbConnList);
 
-	BeginTraveData(&connPool.dbConnList);
+	BeginTraveData(&pConnPool->dbConnList);
 		pDBConnNode = (DBConnNode *)pData;
 		if (pDBConnNode->nConnection == 0)
 		{
@@ -90,22 +110,26 @@ DBConnNode *GetFreeDBConn()
 	/*当没有空闲连接，创建新的连接*/
 	if (!pDBConnNode)
 	{
-		if (CreateMulDBConn(connPool.nAddConnNumber) == 0)
+		if (CreateMulDBConn(pConnPool, pConnPool->nAddConnNumber) == 0)
 		{
 			ErrorInfor("GetFreeDBConn", ERROR_CREPOOL);
 		}
 	}
 
-	UnlockQueue(&connPool.dbConnList);
+	UnlockQueue(&pConnPool->dbConnList);
 
 	return pDBConnNode;
 }
 
 int ReleaseAccessDBConn(DBConnNode *pDBConnNode)
 {
-	pDBConnNode->nConnection = 0;//状态为已连接
-	pDBConnNode->tmAccessTime = time(NULL);
-	return 1;
+	if (pDBConnNode)
+	{
+		pDBConnNode->nConnection = 0;//状态为已连接
+		pDBConnNode->tmAccessTime = time(NULL);
+		return 1;
+	}
+	return 0;
 }
 
 void ReleaseDBConnNode(DBConnNode *pNode)
@@ -124,33 +148,46 @@ void ReleaseDBConnNode(DBConnNode *pNode)
 
 void *FreeDBConnAccess(void *pData)
 {
+	DBConnPool *pConnPool = (DBConnPool *)pData;
+	if (!pConnPool)
+	{
+		ErrorInfor("FreeDBConnAccess", ERROR_TRANTYPE);
+		return NULL;
+	}
+
 	/*遍历队列列表*/
 	time_t tmCurTime = 0;
 	DBConnNode *pDBConnNode = NULL;
 
-	LockQueue(&connPool.dbConnList);
+	LockQueue(&pConnPool->dbConnList);
 
 	//当前线程超过核心线程数删除
-	if (GetCurQueueLen(&connPool.dbConnList) > connPool.nCoreConnNumber)
+	if (GetCurQueueLen(&pConnPool->dbConnList) > pConnPool->nCoreConnNumber)
 	{
-		BeginTraveData(&connPool.dbConnList);
+		BeginTraveData(&pConnPool->dbConnList);
 			pDBConnNode = (DBConnNode *)pData;
 			tmCurTime = time(NULL);
-			if ((pDBConnNode->nConnection == 0) && ((tmCurTime - pDBConnNode->tmAccessTime) >= connPool.nAccOverTime))
+			if ((pDBConnNode->nConnection == 0) && ((tmCurTime - pDBConnNode->tmAccessTime) >= pConnPool->nAccOverTime))
 			{
 				ReleaseDBConnNode(pDBConnNode);
-				DeleteForNode(&connPool.dbConnList, pQueueNode);
+				DeleteForNode(&pConnPool->dbConnList, pQueueNode);
 			}
 		EndTraveData();
 	}
 
-	UnlockQueue(&connPool.dbConnList);
+	UnlockQueue(&pConnPool->dbConnList);
 
 	return NULL;
 }
 
-int CreateMulDBConn(int nNumber)
+int CreateMulDBConn(DBConnPool *pConnPool, int nNumber)
 {
+	if (!pConnPool)
+	{
+		ErrorInfor("CreateMulDBConn", ERROR_ARGNULL);
+		return 0;
+	}
+
 	Ini ini;
 	if (InitIni(&ini, "/Users/liuhanchong/Documents/workspace/comm_server/ini/db.ini", 200) != 1)
 	{
@@ -170,7 +207,7 @@ int CreateMulDBConn(int nNumber)
 
 	while ((nNumber--) > 0)
 	{
-		if (InsertDBConn(pHost, pUser, pPasswd, pDB, pUnixSocket, lClientFlag, nPort) == 0)
+		if (InsertDBConn(pConnPool, pHost, pUser, pPasswd, pDB, pUnixSocket, lClientFlag, nPort) == 0)
 		{
 			ErrorInfor("CreateMulDBConn", ERROR_CRETHREAD);
 		}
@@ -194,9 +231,15 @@ int CreateMulDBConn(int nNumber)
 	return 1;
 }
 
-int InsertDBConn(char *pHost, char *pUser, char *pPasswd, char *pDB, char *pUnixSocket, unsigned long lClientFlag, unsigned int nPort)
+int InsertDBConn(DBConnPool *pConnPool, char *pHost, char *pUser, char *pPasswd, char *pDB, char *pUnixSocket, unsigned long lClientFlag, unsigned int nPort)
 {
-	if (GetCurQueueLen(&connPool.dbConnList) >= GetMaxQueueLen(&connPool.dbConnList))
+	if (!pConnPool)
+	{
+		ErrorInfor("InsertDBConn", ERROR_ARGNULL);
+		return 0;
+	}
+
+	if (GetCurQueueLen(&pConnPool->dbConnList) >= GetMaxQueueLen(&pConnPool->dbConnList))
 	{
 		ErrorInfor("InsertDBConn", ERROR_OUTQUEUE);
 		return 0;
@@ -223,7 +266,7 @@ int InsertDBConn(char *pHost, char *pUser, char *pPasswd, char *pDB, char *pUnix
 	pTmp->tmAccessTime = time(NULL);
 	pTmp->nConnection = 0;
 
-	int nRet = Insert(&connPool.dbConnList, (void *)pTmp, 0);
+	int nRet = Insert(&pConnPool->dbConnList, (void *)pTmp, 0);
 	if (!nRet)
 	{
 		ReleaseDBConnNode(pTmp);

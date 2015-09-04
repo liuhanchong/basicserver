@@ -10,6 +10,7 @@ RM := rm -rf
 -include sources.mk
 -include poolmanage/subdir.mk
 -include logmanage/subdir.mk
+-include communication/subdir.mk
 -include basiccomponent/subdir.mk
 -include subdir.mk
 -include objects.mk

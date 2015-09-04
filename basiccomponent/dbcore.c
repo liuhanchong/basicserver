@@ -19,6 +19,7 @@ MYSQL *OpenDB(char *pHost, char *pUser, char *pPasswd, char *pDB, char *pUnixSoc
 	if (!mysql_real_connect(pMySql, pHost, pUser, pPasswd, pDB, nPort, pUnixSocket, lClientFlag))
 	{
 		ErrorInfor("OpenDB-1", (char *)mysql_error(pMySql));
+
 		CloseDB(pMySql);
 		return NULL;
 	}
@@ -26,6 +27,7 @@ MYSQL *OpenDB(char *pHost, char *pUser, char *pPasswd, char *pDB, char *pUnixSoc
 	if (mysql_autocommit(pMySql, 0) != 0)
 	{
 		ErrorInfor("OpenDB-2", (char *)mysql_error(pMySql));
+
 		CloseDB(pMySql);
 		return NULL;
 	}
