@@ -34,6 +34,9 @@
 #define ERROR_DELQUEUE   ("删除元素失败")
 #define ERROR_EDITQUEUE  ("修改数据失败")
 #define ERROR_FILEDDB    ("获取结果集字段失败")
+#define ERROR_READDINI 	 ("读取配置文件失败")
+#define ERROR_INITQUEUE  ("初始化队列失败")
+#define ERROR_CREPOOL 	 ("创建线程池失败")
 
 #define ERR_TYPETRAN ("强制转换数据失败") //数据转换失败
 #define ERR_UNLOCK ("释放互斥锁失败") //释放互斥锁失败

@@ -16,4 +16,5 @@ SUBDIRS := \
 basiccomponent \
 logmanage \
 . \
+poolmanage \
 

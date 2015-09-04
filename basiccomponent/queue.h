@@ -37,8 +37,8 @@ typedef struct List
 			QueueNode *pQueueNode = NULL; \
 			while (nIndex < GetCurQueueLen(list)) \
 			{ \
-				pNode = GetNodeForIndex(list, nIndex); \
-				if (pNode) \
+				pQueueNode = GetNodeForIndex(list, nIndex); \
+				if (pQueueNode) \
 				{
 
 #define EndTraveNode() \
@@ -48,8 +48,8 @@ typedef struct List
 
 /*遍历数据*/
 #define BeginTraveData(list) \
-			BeginTraveNode(list, nIndex, pNode) \
-				void *pData = pNode->pData; \
+			BeginTraveNode(list) \
+				void *pData = pQueueNode->pData; \
 				if (pData) \
 				{
 
