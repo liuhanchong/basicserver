@@ -16,7 +16,7 @@ int CreateDBConnPool(DBConnPool *pConnPool)
 	}
 
 	Ini ini;
-	if (InitIni(&ini, "/Users/liuhanchong/Documents/workspace/basicserver/ini/dbconnpool.ini", 200) != 1)
+	if (InitIni(&ini, "../ini/dbconnpool.ini", 200) != 1)
 	{
 		ErrorInfor("CreateDBConnPool", ERROR_READDINI);
 		return 0;
@@ -189,7 +189,7 @@ int CreateMulDBConn(DBConnPool *pConnPool, int nNumber)
 	}
 
 	Ini ini;
-	if (InitIni(&ini, "/Users/liuhanchong/Documents/workspace/basicserver/ini/db.ini", 200) != 1)
+	if (InitIni(&ini, "../ini/db.ini", 200) != 1)
 	{
 		ErrorInfor("CreateMulDBConn", ERROR_READDINI);
 		return 0;

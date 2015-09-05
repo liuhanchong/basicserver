@@ -16,7 +16,7 @@ int CreateThreadPool(ThreadPool *pThreadQueue, int *pTaskQueueLength)
 	}
 
 	Ini ini;
-	if (InitIni(&ini, "/Users/liuhanchong/Documents/workspace/basicserver/ini/threadpool.ini", 200) != 1)
+	if (InitIni(&ini, "../ini/threadpool.ini", 200) != 1)
 	{
 		ErrorInfor("CreateThreadPool", ERROR_READDINI);
 		return 0;
@@ -181,6 +181,7 @@ int ExecuteTask(ThreadPool *pThreadQueue, void *(*Fun)(void *), void *pData)
 	}
 
 	/*遍历队列列表*/
+	int nReturn = 0;
 	LockQueue(&pThreadQueue->threadList);
 
 	ThreadNode *pThreadNode = GetFreeThread(pThreadQueue);
@@ -192,13 +193,13 @@ int ExecuteTask(ThreadPool *pThreadQueue, void *(*Fun)(void *), void *pData)
 		if (ResumeThread(pThreadNode->pThread) == 1)
 		{
 			pThreadNode->tmExeTime = time(NULL);
-			return 1;
+			nReturn = 1;
 		}
 	}
 
 	UnlockQueue(&pThreadQueue->threadList);
 
-	return 0;
+	return nReturn;
 }
 
 void SetTaskQueueLength(ThreadPool *pThreadQueue, int *pTaskQueueLength)

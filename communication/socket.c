@@ -17,7 +17,7 @@ int Create(int nDomain, int nType, int nProt, int nPort, const char *pIp)
 	}
 
 	Ini ini;
-	if (InitIni(&ini, "/Users/liuhanchong/Documents/workspace/basicserver/ini/socket.ini", 200) != 1)
+	if (InitIni(&ini, "../ini/socket.ini", 200) != 1)
 	{
 		ErrorInfor("Create", ERROR_READDINI);
 		return 0;
@@ -144,17 +144,17 @@ int Close(int nSocket)
 		ReleaseThread(serverSocket.pOutTimeThread);
 	}
 
+	if (ReleaseAio(&serverSocket.aiox) == 0)
+	{
+		ErrorInfor("Close", ERROR_RELAIOX);
+	}
+
 	/*遍历队列列表*/
 	BeginTraveData(&serverSocket.socketList);
 		ReleaseSocketNode((SocketNode *)pData);
 	EndTraveData();
 
 	ReleaseQueue(&serverSocket.socketList);
-
-	if (ReleaseAio(&serverSocket.aiox) == 0)
-	{
-		ErrorInfor("Close", ERROR_RELAIOX);
-	}
 
 	if (close(nSocket) != 0)
 	{

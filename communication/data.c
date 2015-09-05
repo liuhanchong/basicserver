@@ -10,7 +10,7 @@
 int InitData()
 {
 	Ini ini;
-	if (InitIni(&ini, "/Users/liuhanchong/Documents/workspace/basicserver/ini/data.ini", 200) != 1)
+	if (InitIni(&ini, "../ini/data.ini", 200) != 1)
 	{
 		ErrorInfor("InitData", ERROR_READDINI);
 		return 0;
@@ -213,7 +213,6 @@ int InsertDataNode(int nSocket, void *pData, int nDataSize, int nType)
 		LockQueue(&data.recvDataList);
 		Insert(&data.recvDataList, pDataNode, 0);
 		UnlockQueue(&data.recvDataList);
-
 	}
 	else
 	{
@@ -231,26 +230,28 @@ void *TestData(void *pData)
 	{
 		if(pDataNode->pData)
 		{
-			printf("INFOR-socket:%d data:%s\n", pDataNode->nSocket, (char *)pDataNode->pData);
-//			DBConnNode *pDBConnNode = GetFreeDBConn(&data.dbConnPool);
-//			if (pDBConnNode)
-//			{
-//				if (ExecuteModify(pDBConnNode->pMySql, "insert into test.message(id, message) values(1, '123')") == 0)
-//				{
-////					printf("1\n");
-//					ReleaseAccessDBConn(pDBConnNode);
-//					exit(0);
-//				}
-//				else
-//				{
-////					printf("2\n");
-//				}
-//				ReleaseAccessDBConn(pDBConnNode);
-//			}
-//			else
-//			{
-//				printf("没有空闲的连接\n");
-//			}
+//			char *pData = (char *)pDataNode->pData;
+//			pData[pDataNode->nDataSize - 1] = '\0';
+//			printf("INFOR-socket:%d data:%s\n", pDataNode->nSocket, pData);
+			DBConnNode *pDBConnNode = GetFreeDBConn(&data.dbConnPool);
+			if (pDBConnNode)
+			{
+				if (ExecuteModify(pDBConnNode->pMySql, "insert into test.message(id, message) values(1, '123')") == 0)
+				{
+//					printf("1\n");
+					ReleaseAccessDBConn(pDBConnNode);
+					exit(0);
+				}
+				else
+				{
+//					printf("2\n");
+				}
+				ReleaseAccessDBConn(pDBConnNode);
+			}
+			else
+			{
+				printf("没有空闲的连接\n");
+			}
 		}
 
 		ReleaseDataNode(pDataNode);

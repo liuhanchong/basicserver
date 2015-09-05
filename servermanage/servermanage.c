@@ -87,7 +87,7 @@ void ProcessMessage()
 int StartServer()
 {
 	Ini ini;
-	if (InitIni(&ini, "/Users/liuhanchong/Documents/workspace/basicserver/ini/servermanage.ini", 200) != 1)
+	if (InitIni(&ini, "../ini/servermanage.ini", 200) != 1)
 	{
 		ErrorInfor("StartServer", ERROR_READDINI);
 		return 0;

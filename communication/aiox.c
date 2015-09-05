@@ -202,7 +202,11 @@ int Read(int nAioId, int nMaxBufferLength, struct kevent *event)
 	{
 		ErrorInfor("Read", ERROR_TRANTYPE);
 	}
-	pSocketNode->tmAccDateTime = time(NULL);
+	else
+	{
+		pSocketNode->tmAccDateTime = time(NULL);
+	}
+
 	InsertRecvDataNode(event->ident, pData, nDataSize);
 
 	return 1;
