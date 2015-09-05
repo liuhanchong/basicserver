@@ -1,3 +1,0 @@
-clear
-cd /Users/liuhanchong/Documents/workspace/basicserver/Debug
-./basicserver $1

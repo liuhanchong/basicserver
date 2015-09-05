@@ -89,30 +89,21 @@ int ReleaseData()
 		ReleaseThread(data.pProRecvThread);
 	}
 
+	printf("6\n");
+
 	if (data.pProSendThread)
 	{
 		ReleaseThread(data.pProSendThread);
 	}
 
-	if (ReleaseThreadPool(&data.recvThreadPool) == 0)
-	{
-		ErrorInfor("ReleaseData-1", ERROR_RELPOOL);
-	}
-
-	if (ReleaseThreadPool(&data.sendThreadPool) == 0)
-	{
-		ErrorInfor("ReleaseData-2", ERROR_RELPOOL);
-	}
-
-	if (ReleaseDBConnPool(&data.dbConnPool) == 0)
-	{
-		ErrorInfor("ReleaseData-3", ERROR_RELPOOL);
-	}
+	printf("10\n");
 
 	/*遍历队列列表*/
 	BeginTraveData(&data.recvDataList);
 		ReleaseDataNode((DataNode *)pData);
 	EndTraveData();
+
+	printf("11\n");
 
 	if (ReleaseQueue(&data.recvDataList) == 0)
 	{
@@ -123,9 +114,32 @@ int ReleaseData()
 		ReleaseDataNode((DataNode *)pData);
 	EndTraveData();
 
+	printf("12\n");
+
 	if (ReleaseQueue(&data.sendDataList) == 0)
 	{
 		ErrorInfor("ReleaseData-2", ERROR_RELQUEUE);
+	}
+
+	printf("7\n");
+
+	if (ReleaseThreadPool(&data.recvThreadPool) == 0)
+	{
+		ErrorInfor("ReleaseData-1", ERROR_RELPOOL);
+	}
+
+	printf("8\n");
+
+	if (ReleaseThreadPool(&data.sendThreadPool) == 0)
+	{
+		ErrorInfor("ReleaseData-2", ERROR_RELPOOL);
+	}
+
+	printf("9\n");
+
+	if (ReleaseDBConnPool(&data.dbConnPool) == 0)
+	{
+		ErrorInfor("ReleaseData-3", ERROR_RELPOOL);
 	}
 
 	return 1;

@@ -90,25 +90,35 @@ int ReleaseThreadPool(ThreadPool *pThreadQueue)
 		return 0;
 	}
 
+	printf("13\n");
+
 	if (pThreadQueue->pDynAddThread)
 	{
 		ReleaseThread(pThreadQueue->pDynAddThread);
 	}
+
+	printf("14\n");
 
 	if (pThreadQueue->pFreeOvertimeThread)
 	{
 		ReleaseThread(pThreadQueue->pFreeOvertimeThread);
 	}
 
+	printf("15\n");
+
 	if (pThreadQueue->pExecuteOvertimeThread)
 	{
 		ReleaseThread(pThreadQueue->pExecuteOvertimeThread);
 	}
 
+	printf("16\n");
+
 	/*遍历队列列表*/
 	BeginTraveData(&pThreadQueue->threadList);
 		ReleaseThreadNode((ThreadNode *)pData);
 	EndTraveData();
+
+	printf("17\n");
 
 	ReleaseQueue(&pThreadQueue->threadList);
 
@@ -284,7 +294,7 @@ void *FreeThreadExecute(void *pData)
 	LockQueue(&pThreadQueue->threadList);
 
 	BeginTraveData(&pThreadQueue->threadList);
-	pThreadNode = (ThreadNode *)pData;
+		pThreadNode = (ThreadNode *)pData;
 		tmCurTime = time(NULL);
 		if ((IsResume(pThreadNode->pThread) == 0) && ((tmCurTime - pThreadNode->tmExeTime) >= pThreadQueue->nExeThreadOverTime))
 		{

@@ -57,6 +57,12 @@
 #define ERROR_CRESHAMEM  ("创建共享内存失败")
 #define ERROR_SERISRUN   ("服务器已启动")
 #define ERROR_SERNORUN   ("服务器未启动")
+#define ERROR_GETSHAMEM  ("获取共享内存失败")
+#define ERROR_CUTSHAMEM  ("断开共享内存失败")
+#define ERROR_CRESOCKET  ("创建SOCKET失败")
+#define ERROR_CRELISTEN  ("创建监听失败")
+#define ERROR_CREACCEPT  ("创建接收SOCKET失败")
+#define ERROR_CRESIGNAL  ("创建信号失败")
 
 void DebugInfor(char *pDebug); /*在调试时，打印的一些运行时信息，当版本发布时候，此函数输出的信息会被屏蔽*/
 void LogInfor(char *pLog); /*日常运行情况的记录*/

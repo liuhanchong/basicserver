@@ -134,6 +134,8 @@ int Close(int nSocket)
 		return 0;
 	}
 
+	printf("1\n");
+
 	if (serverSocket.pAccThread)
 	{
 		ReleaseThread(serverSocket.pAccThread);
@@ -144,17 +146,25 @@ int Close(int nSocket)
 		ReleaseThread(serverSocket.pOutTimeThread);
 	}
 
+	printf("2\n");
+
 	if (ReleaseAio(&serverSocket.aiox) == 0)
 	{
 		ErrorInfor("Close", ERROR_RELAIOX);
 	}
+
+	printf("3\n");
 
 	/*遍历队列列表*/
 	BeginTraveData(&serverSocket.socketList);
 		ReleaseSocketNode((SocketNode *)pData);
 	EndTraveData();
 
+	printf("n1\n");
+
 	ReleaseQueue(&serverSocket.socketList);
+
+	printf("n2\n");
 
 	if (close(nSocket) != 0)
 	{
