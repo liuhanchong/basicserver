@@ -172,7 +172,7 @@ void ReleaseIni(Ini *pIni)
 
 void FindValue(Ini *pIni, char *pSection, char *pKey, char *pValue, int nSize)
 {
-	if (!pIni || !pSection || !pKey || !pValue || nSize <= 0 || pIni->pFile)
+	if (!pIni || !pSection || !pKey || !pValue || nSize <= 0 || !pIni->pFile)
 	{
 		ErrorInfor("FindValue", ERROR_ARGNULL);
 		return;
@@ -286,7 +286,6 @@ char *GetLine(char *pText, int nSize, FILE *pFile)
 	char *pRet = fgets(pText, nSize, pFile);
 	if (!pRet)
 	{
-		SystemErrorInfor("GetLine");
 		return 0;
 	}
 

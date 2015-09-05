@@ -7,7 +7,7 @@
 
 #include "threadpool.h"
 
-int CreateThreadPool(ThreadPool *pThreadQueue)
+int CreateThreadPool(ThreadPool *pThreadQueue, int *pTaskQueueLength)
 {
 	if (!pThreadQueue)
 	{
@@ -16,7 +16,7 @@ int CreateThreadPool(ThreadPool *pThreadQueue)
 	}
 
 	Ini ini;
-	if (InitIni(&ini, "/Users/liuhanchong/Documents/workspace/comm_server/ini/threadpool.ini", 200) != 1)
+	if (InitIni(&ini, "/Users/liuhanchong/Documents/workspace/basicserver/ini/threadpool.ini", 200) != 1)
 	{
 		ErrorInfor("CreateThreadPool", ERROR_READDINI);
 		return 0;
@@ -36,7 +36,7 @@ int CreateThreadPool(ThreadPool *pThreadQueue)
 
 	ReleaseIni(&ini);
 
-	pThreadQueue->pTaskQueueLength = NULL;
+	pThreadQueue->pTaskQueueLength = pTaskQueueLength;
 
 	if (InitQueue(&pThreadQueue->threadList, pThreadQueue->nMaxThreadNumber, 0) == 0)
 	{
@@ -105,14 +105,10 @@ int ReleaseThreadPool(ThreadPool *pThreadQueue)
 		ReleaseThread(pThreadQueue->pExecuteOvertimeThread);
 	}
 
-	LockQueue(&pThreadQueue->threadList);
-
 	/*遍历队列列表*/
 	BeginTraveData(&pThreadQueue->threadList);
 		ReleaseThreadNode((ThreadNode *)pData);
 	EndTraveData();
-
-	UnlockQueue(&pThreadQueue->threadList);
 
 	ReleaseQueue(&pThreadQueue->threadList);
 
@@ -128,8 +124,6 @@ int GetFreeThreadNumber(ThreadPool *pThreadQueue)
 	}
 
 	int nCount = 0;
-	/*遍历队列列表*/
-	LockQueue(&pThreadQueue->threadList);
 
 	BeginTraveData(&pThreadQueue->threadList);
 		if (IsResume(((ThreadNode *)pData)->pThread) == 0)
@@ -137,8 +131,6 @@ int GetFreeThreadNumber(ThreadPool *pThreadQueue)
 			nCount++;
 		}
 	EndTraveData();
-
-	UnlockQueue(&pThreadQueue->threadList);
 
 	return nCount;
 }
@@ -152,8 +144,6 @@ ThreadNode *GetFreeThread(ThreadPool *pThreadQueue)
 	}
 
 	ThreadNode *pThreadNode = NULL;
-	/*遍历队列列表*/
-	LockQueue(&pThreadQueue->threadList);
 
 	BeginTraveData(&pThreadQueue->threadList);
 		pThreadNode = (ThreadNode *)pData;
@@ -164,8 +154,6 @@ ThreadNode *GetFreeThread(ThreadPool *pThreadQueue)
 		}
 		pThreadNode = NULL;
 	EndTraveData();
-
-	UnlockQueue(&pThreadQueue->threadList);
 
 	return pThreadNode;
 }
@@ -192,6 +180,9 @@ int ExecuteTask(ThreadPool *pThreadQueue, void *(*Fun)(void *), void *pData)
 		return 0;
 	}
 
+	/*遍历队列列表*/
+	LockQueue(&pThreadQueue->threadList);
+
 	ThreadNode *pThreadNode = GetFreeThread(pThreadQueue);
 	if (pThreadNode)
 	{
@@ -204,6 +195,8 @@ int ExecuteTask(ThreadPool *pThreadQueue, void *(*Fun)(void *), void *pData)
 			return 1;
 		}
 	}
+
+	UnlockQueue(&pThreadQueue->threadList);
 
 	return 0;
 }
@@ -320,6 +313,7 @@ int CreateMulThread(ThreadPool *pThreadQueue, int nNumber)
 			ErrorInfor("CreateMulThread", ERROR_CRETHREAD);
 		}
 	}
+
 	return 1;
 }
 

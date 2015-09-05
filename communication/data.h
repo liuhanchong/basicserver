@@ -29,7 +29,7 @@ typedef struct Data
 	DBConnPool dbConnPool;
 
 	int nMaxRecvListLen;
-	int nMaxSendDataList;
+	int nMaxSendListLen;
 
 	Thread *pProRecvThread;
 	int nProRecvDataLoopSpace;

@@ -42,7 +42,7 @@ typedef struct ThreadPool
 } ThreadPool;
 
 /*接口*/
-int CreateThreadPool(ThreadPool *pThreadQueue);
+int CreateThreadPool(ThreadPool *pThreadQueue, int *pTaskQueueLength);
 int ReleaseThreadPool(ThreadPool *pThreadQueue);
 int GetFreeThreadNumber(ThreadPool *pThreadQueue);/*获取空闲线程个数*/
 ThreadNode *GetFreeThread(ThreadPool *pThreadQueue);/*获取一个空闲线程*/

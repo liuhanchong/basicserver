@@ -17,7 +17,7 @@ int Create(int nDomain, int nType, int nProt, int nPort, const char *pIp)
 	}
 
 	Ini ini;
-	if (InitIni(&ini, "/Users/liuhanchong/Documents/workspace/comm_server/ini/socket.ini", 200) != 1)
+	if (InitIni(&ini, "/Users/liuhanchong/Documents/workspace/basicserver/ini/socket.ini", 200) != 1)
 	{
 		ErrorInfor("Create", ERROR_READDINI);
 		return 0;

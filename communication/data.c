@@ -10,14 +10,14 @@
 int InitData()
 {
 	Ini ini;
-	if (InitIni(&ini, "/Users/liuhanchong/Documents/workspace/comm_server/ini/data.ini", 200) != 1)
+	if (InitIni(&ini, "/Users/liuhanchong/Documents/workspace/basicserver/ini/data.ini", 200) != 1)
 	{
 		ErrorInfor("InitData", ERROR_READDINI);
 		return 0;
 	}
 
 	data.nMaxRecvListLen = GetInt(&ini, "DATANUMBER", "MaxRecvListLen", 999); /*最大处理数据数量*/
-	data.nMaxSendDataList = GetInt(&ini, "DATANUMBER", "MaxSendListLen", 999); /*最大处理数据数量*/
+	data.nMaxSendListLen = GetInt(&ini, "DATANUMBER", "MaxSendListLen", 999); /*最大处理数据数量*/
 	data.nProRecvDataLoopSpace = GetInt(&ini, "DATANUMBER", "ProRecvDataLoopSpace", 1); /*处理数据时间间隔*/
 	data.nProSendDataLoopSpace = GetInt(&ini, "DATANUMBER", "ProSendDataLoopSpace", 1); /*处理数据时间间隔*/
 
@@ -29,7 +29,7 @@ int InitData()
 		return 0;
 	}
 
-	if (InitQueue(&data.sendDataList, data.nMaxSendDataList, 0) == 0)
+	if (InitQueue(&data.sendDataList, data.nMaxSendListLen, 0) == 0)
 	{
 		ErrorInfor("InitData-2", ERROR_INITQUEUE);
 
@@ -37,7 +37,7 @@ int InitData()
 		return 0;
 	}
 
-	if (CreateThreadPool(&data.recvThreadPool) == 0)
+	if (CreateThreadPool(&data.recvThreadPool, &data.recvDataList.nCurQueueLen) == 0)
 	{
 		ErrorInfor("InitData-1", ERROR_CREPOOL);
 
@@ -45,19 +45,13 @@ int InitData()
 		return 0;
 	}
 
-	/*设置动态队列*/
-	SetTaskQueueLength(&data.recvThreadPool, &data.recvDataList.nCurQueueLen);
-
-	if (CreateThreadPool(&data.sendThreadPool) == 0)
+	if (CreateThreadPool(&data.sendThreadPool, &data.sendDataList.nCurQueueLen) == 0)
 	{
 		ErrorInfor("InitData-2", ERROR_CREPOOL);
 
 		ReleaseData();
 		return 0;
 	}
-
-	/*设置动态队列*/
-	SetTaskQueueLength(&data.sendThreadPool, &data.sendDataList.nCurQueueLen);
 
 	if (CreateDBConnPool(&data.dbConnPool) == 0)
 	{
@@ -120,16 +114,14 @@ int ReleaseData()
 		ReleaseDataNode((DataNode *)pData);
 	EndTraveData();
 
-	{
-		BeginTraveData(&data.sendDataList);
-			ReleaseDataNode((DataNode *)pData);
-		EndTraveData();
-	}
-
 	if (ReleaseQueue(&data.recvDataList) == 0)
 	{
 		ErrorInfor("ReleaseData-1", ERROR_RELQUEUE);
 	}
+
+	BeginTraveData(&data.sendDataList);
+		ReleaseDataNode((DataNode *)pData);
+	EndTraveData();
 
 	if (ReleaseQueue(&data.sendDataList) == 0)
 	{
@@ -239,26 +231,26 @@ void *TestData(void *pData)
 	{
 		if(pDataNode->pData)
 		{
-//			printf("INFOR-socket:%d data:%s\n", pDataNode->nSocket, (char *)pDataNode->pData);
-			DBConnNode *pDBConnNode = GetFreeDBConn(&data.dbConnPool);
-			if (pDBConnNode)
-			{
-				if (ExecuteModify(pDBConnNode->pMySql, "insert into test.message(id, message) values(1, '123')") == 0)
-				{
-//					printf("1\n");
-					ReleaseAccessDBConn(pDBConnNode);
-					exit(0);
-				}
-				else
-				{
-//					printf("2\n");
-				}
-				ReleaseAccessDBConn(pDBConnNode);
-			}
-			else
-			{
-				printf("没有空闲的连接\n");
-			}
+			printf("INFOR-socket:%d data:%s\n", pDataNode->nSocket, (char *)pDataNode->pData);
+//			DBConnNode *pDBConnNode = GetFreeDBConn(&data.dbConnPool);
+//			if (pDBConnNode)
+//			{
+//				if (ExecuteModify(pDBConnNode->pMySql, "insert into test.message(id, message) values(1, '123')") == 0)
+//				{
+////					printf("1\n");
+//					ReleaseAccessDBConn(pDBConnNode);
+//					exit(0);
+//				}
+//				else
+//				{
+////					printf("2\n");
+//				}
+//				ReleaseAccessDBConn(pDBConnNode);
+//			}
+//			else
+//			{
+//				printf("没有空闲的连接\n");
+//			}
 		}
 
 		ReleaseDataNode(pDataNode);

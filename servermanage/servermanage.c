@@ -29,7 +29,7 @@ int Start(int nSize, char **aArgArray)
 			}
 		}
 
-		ErrorInfor("Start", ERROR_START);
+		ErrorInfor("Start", ERROR_SERISRUN);
 		return 0;
 	}
 	//重启服务器
@@ -71,7 +71,7 @@ int Start(int nSize, char **aArgArray)
 			}
 		}
 
-		ErrorInfor("Start", ERROR_STOP);
+		ErrorInfor("Start", ERROR_SERNORUN);
 		return 0;
 	}
 
@@ -87,7 +87,7 @@ void ProcessMessage()
 int StartServer()
 {
 	Ini ini;
-	if (InitIni(&ini, "/Users/liuhanchong/Documents/workspace/comm_server/ini/servermanage.ini", 200) != 1)
+	if (InitIni(&ini, "/Users/liuhanchong/Documents/workspace/basicserver/ini/servermanage.ini", 200) != 1)
 	{
 		ErrorInfor("StartServer", ERROR_READDINI);
 		return 0;

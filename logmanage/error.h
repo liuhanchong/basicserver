@@ -55,6 +55,8 @@
 #define ERROR_STOP       ("停止服务器失败")
 #define ERROR_ARGVALUE   ("不匹配的参数")
 #define ERROR_CRESHAMEM  ("创建共享内存失败")
+#define ERROR_SERISRUN   ("服务器已启动")
+#define ERROR_SERNORUN   ("服务器未启动")
 
 void DebugInfor(char *pDebug); /*在调试时，打印的一些运行时信息，当版本发布时候，此函数输出的信息会被屏蔽*/
 void LogInfor(char *pLog); /*日常运行情况的记录*/
