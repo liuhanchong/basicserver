@@ -89,8 +89,6 @@ int ReleaseData()
 		ErrorInfor("ReleaseData-3", ERROR_RELPOOL);
 	}
 
-
-
 	/*閬嶅巻闃熷垪鍒楄〃*/
 	BeginTraveData(&data.recvDataList);
 		ReleaseDataNode((DataNode *)pData);
