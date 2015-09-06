@@ -97,8 +97,6 @@ int ReleaseAio(AioX *pAio)
 		return 0;
 	}
 
-	printf("4\n");
-
 	if (pAio->pProAioThread)
 	{
 		ReleaseThread(pAio->pProAioThread);
@@ -109,8 +107,6 @@ int ReleaseAio(AioX *pAio)
 		free(pAio->pEvnetQueue);
 		pAio->pEvnetQueue = NULL;
 	}
-
-	printf("5\n");
 
 	/*释放data模块*/
 	if (ReleaseData() == 0)

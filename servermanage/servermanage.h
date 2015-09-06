@@ -12,22 +12,15 @@
 #include "../logmanage/error.h"
 #include "../communication/socket.h"
 
-#define KEY 0x19900510
-
 typedef struct ShareMemory
 {
 	pid_t proId;
-	int nRun;
+	int nStart;
 } ShareMemory;
 
-typedef struct Server
-{
-	ShareMemory *pShareMemory;
-	int nServerSocket;
-    int nShareMemoryId;
-} Server;
-
-static Server server;
+static int nServerSocket = -1;
+static int nShareMemoryId = -1;
+static ShareMemory *pShareMemory = NULL;
 
 /*接口*/
 int Start(int nSize, char **aArgArray);
