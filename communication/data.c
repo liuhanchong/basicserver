@@ -110,6 +110,7 @@ int ReleaseData()
 	}
 
 
+
 	/*閬嶅巻闃熷垪鍒楄〃*/
 	BeginTraveData(&data.recvDataList);
 		ReleaseDataNode((DataNode *)pData);
