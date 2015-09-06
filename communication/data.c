@@ -1,7 +1,7 @@
 /*
  * data.c
  *
- *  Created on: 2015年9月4日
+ *  Created on: 2015骞�鏈�鏃�
  *      Author: liuhanchong
  */
 
@@ -16,10 +16,10 @@ int InitData()
 		return 0;
 	}
 
-	data.nMaxRecvListLen = GetInt(&ini, "DATANUMBER", "MaxRecvListLen", 999); /*最大处理数据数量*/
-	data.nMaxSendListLen = GetInt(&ini, "DATANUMBER", "MaxSendListLen", 999); /*最大处理数据数量*/
-	data.nProRecvDataLoopSpace = GetInt(&ini, "DATANUMBER", "ProRecvDataLoopSpace", 1); /*处理数据时间间隔*/
-	data.nProSendDataLoopSpace = GetInt(&ini, "DATANUMBER", "ProSendDataLoopSpace", 1); /*处理数据时间间隔*/
+	data.nMaxRecvListLen = GetInt(&ini, "DATANUMBER", "MaxRecvListLen", 999); /*鏈�ぇ澶勭悊鏁版嵁鏁伴噺*/
+	data.nMaxSendListLen = GetInt(&ini, "DATANUMBER", "MaxSendListLen", 999); /*鏈�ぇ澶勭悊鏁版嵁鏁伴噺*/
+	data.nProRecvDataLoopSpace = GetInt(&ini, "DATANUMBER", "ProRecvDataLoopSpace", 1); /*澶勭悊鏁版嵁鏃堕棿闂撮殧*/
+	data.nProSendDataLoopSpace = GetInt(&ini, "DATANUMBER", "ProSendDataLoopSpace", 1); /*澶勭悊鏁版嵁鏃堕棿闂撮殧*/
 
 	ReleaseIni(&ini);
 
@@ -29,13 +29,13 @@ int InitData()
 		return 0;
 	}
 
-	if (InitQueue(&data.sendDataList, data.nMaxSendListLen, 0) == 0)
-	{
-		ErrorInfor("InitData-2", ERROR_INITQUEUE);
+	// if (InitQueue(&data.sendDataList, data.nMaxSendListLen, 0) == 0)
+	// {
+	// 	ErrorInfor("InitData-2", ERROR_INITQUEUE);
 
-		ReleaseData();
-		return 0;
-	}
+	// 	ReleaseData();
+	// 	return 0;
+	// }
 
 	if (CreateThreadPool(&data.recvThreadPool, &data.recvDataList.nCurQueueLen) == 0)
 	{
@@ -45,13 +45,13 @@ int InitData()
 		return 0;
 	}
 
-	if (CreateThreadPool(&data.sendThreadPool, &data.sendDataList.nCurQueueLen) == 0)
-	{
-		ErrorInfor("InitData-2", ERROR_CREPOOL);
+	// if (CreateThreadPool(&data.sendThreadPool, &data.sendDataList.nCurQueueLen) == 0)
+	// {
+	// 	ErrorInfor("InitData-2", ERROR_CREPOOL);
 
-		ReleaseData();
-		return 0;
-	}
+	// 	ReleaseData();
+	// 	return 0;
+	// }
 
 	if (CreateDBConnPool(&data.dbConnPool) == 0)
 	{
@@ -70,35 +70,23 @@ int InitData()
 		return 0;
 	}
 
-	data.pProSendThread = CreateLoopThread(ProcessSendData, NULL, data.nProSendDataLoopSpace);
-	if (!data.pProSendThread)
-	{
-		ErrorInfor("InitData-2", ERROR_CRETHREAD);
+	// data.pProSendThread = CreateLoopThread(ProcessSendData, NULL, data.nProSendDataLoopSpace);
+	// if (!data.pProSendThread)
+	// {
+	// 	ErrorInfor("InitData-2", ERROR_CRETHREAD);
 
-		ReleaseData();
-		return 0;
-	}
+	// 	ReleaseData();
+	// 	return 0;
+	// }
 
 	return 1;
 }
 
 int ReleaseData()
 {
-	if (data.pProRecvThread)
-	{
-		ReleaseThread(data.pProRecvThread);
-	}
-
-	printf("6\n");
-
-	if (data.pProSendThread)
-	{
-		ReleaseThread(data.pProSendThread);
-	}
-
 	printf("10\n");
 
-	/*遍历队列列表*/
+	/*閬嶅巻闃熷垪鍒楄〃*/
 	BeginTraveData(&data.recvDataList);
 		ReleaseDataNode((DataNode *)pData);
 	EndTraveData();
@@ -110,16 +98,16 @@ int ReleaseData()
 		ErrorInfor("ReleaseData-1", ERROR_RELQUEUE);
 	}
 
-	BeginTraveData(&data.sendDataList);
-		ReleaseDataNode((DataNode *)pData);
-	EndTraveData();
+	// BeginTraveData(&data.sendDataList);
+	// 	ReleaseDataNode((DataNode *)pData);
+	// EndTraveData();
 
-	printf("12\n");
+	// printf("12\n");
 
-	if (ReleaseQueue(&data.sendDataList) == 0)
-	{
-		ErrorInfor("ReleaseData-2", ERROR_RELQUEUE);
-	}
+	// if (ReleaseQueue(&data.sendDataList) == 0)
+	// {
+	// 	ErrorInfor("ReleaseData-2", ERROR_RELQUEUE);
+	// }
 
 	printf("7\n");
 
@@ -130,10 +118,10 @@ int ReleaseData()
 
 	printf("8\n");
 
-	if (ReleaseThreadPool(&data.sendThreadPool) == 0)
-	{
-		ErrorInfor("ReleaseData-2", ERROR_RELPOOL);
-	}
+	// if (ReleaseThreadPool(&data.sendThreadPool) == 0)
+	// {
+	// 	ErrorInfor("ReleaseData-2", ERROR_RELPOOL);
+	// }
 
 	printf("9\n");
 
@@ -141,6 +129,18 @@ int ReleaseData()
 	{
 		ErrorInfor("ReleaseData-3", ERROR_RELPOOL);
 	}
+
+	if (data.pProRecvThread)
+	{
+		ReleaseThread(data.pProRecvThread);
+	}
+
+	printf("6\n");
+
+	// if (data.pProSendThread)
+	// {
+	// 	ReleaseThread(data.pProSendThread);
+	// }
 
 	return 1;
 }
@@ -177,7 +177,7 @@ void *ProcessRecvData(void *pData)
 	QueueNode *pQueueNode = (QueueNode *)GetNodeForIndex(&data.recvDataList, 0);
 	if (pQueueNode)
 	{
-		/*此处分配的datanode内存空间需要执行的线程函数进行销毁*/
+		/*姝ゅ鍒嗛厤鐨刣atanode鍐呭瓨绌洪棿闇�鎵ц鐨勭嚎绋嬪嚱鏁拌繘琛岄攢姣�/
 		if (ExecuteTask(&data.recvThreadPool, TestData, pQueueNode->pData) == 1)
 		{
 			DeleteForNode(&data.recvDataList, pQueueNode);
@@ -196,7 +196,7 @@ void *ProcessSendData(void *pData)
 	QueueNode *pQueueNode = (QueueNode *)GetNodeForIndex(&data.sendDataList, 0);
 	if (pQueueNode)
 	{
-		/*此处分配的datanode内存空间需要执行的线程函数进行销毁*/
+		/*姝ゅ鍒嗛厤鐨刣atanode鍐呭瓨绌洪棿闇�鎵ц鐨勭嚎绋嬪嚱鏁拌繘琛岄攢姣�/
 		if (ExecuteTask(&data.sendThreadPool, TestData, pQueueNode->pData) == 1)
 		{
 			DeleteForNode(&data.sendDataList, pQueueNode);
@@ -221,7 +221,7 @@ int InsertDataNode(int nSocket, void *pData, int nDataSize, int nType)
 	pDataNode->nSocket = nSocket;
 	pDataNode->nDataSize = nDataSize;
 
-	/*插入数据处理队列*/
+	/*鎻掑叆鏁版嵁澶勭悊闃熷垪*/
 	if (nType == 1)
 	{
 		LockQueue(&data.recvDataList);
@@ -264,7 +264,7 @@ void *TestData(void *pData)
 			}
 			else
 			{
-				printf("没有空闲的连接\n");
+				printf("娌℃湁绌洪棽鐨勮繛鎺n");
 			}
 		}
 

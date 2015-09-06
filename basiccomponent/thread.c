@@ -9,31 +9,25 @@
 
 Thread *CreateSingleThread(void *(*Fun)(void *), void *pData)
 {
-	Thread *pThread = CreateThread(Fun, pData);
+	Thread *pThread = CreateThread(Fun, pData, 2, 0);
 	if (!pThread)
 	{
 		ErrorInfor("CreateSingleThread", ERROR_CRETHREAD);
 		return NULL;
 	}
 
-	pThread->nLoopSecond  = 0;
-	pThread->nCancelMode  = 1;
-	pThread->nExecuteMode = 2;
 	return pThread;
 }
 
 Thread *CreateLoopThread(void *(*Fun)(void *), void *pData, int nLoopSecond)
 {
-	Thread *pThread = CreateThread(Fun, pData);
+	Thread *pThread = CreateThread(Fun, pData, 1, nLoopSecond);
 	if (!pThread)
 	{
 		ErrorInfor("CreateLoopThread", ERROR_CRETHREAD);
 		return NULL;
 	}
 
-	pThread->nLoopSecond  = nLoopSecond;
-	pThread->nCancelMode  = 1;
-	pThread->nExecuteMode = 1;
 	return pThread;
 }
 
@@ -47,9 +41,9 @@ int ReleaseThread(Thread *pThread)
 
 	if (pthread_cancel(pThread->thId) == 0 &&
 		pthread_join(pThread->thId, NULL) == 0 &&
-		pthread_mutex_destroy(&pThread->thMutex) == 0 &&
+		pthread_attr_destroy(&pThread->thAttribute) == 0 &&
 		pthread_cond_destroy(&pThread->thCondition) == 0 &&
-		pthread_attr_destroy(&pThread->thAttribute) == 0)
+		pthread_mutex_destroy(&pThread->thMutex) == 0)
 	{
 		free(pThread);
 		pThread = NULL;
@@ -204,7 +198,7 @@ void ReleaseResource(void *pData)
 	}
 }
 
-Thread *CreateThread(void *(*Fun)(void *), void *pData)
+Thread *CreateThread(void *(*Fun)(void *), void *pData, int nExecuteMode, int nLoopSecond)
 {
 	if (!Fun)
 	{
@@ -227,6 +221,9 @@ Thread *CreateThread(void *(*Fun)(void *), void *pData)
 		pThread->nExecute     = 0;
 		pThread->Fun 		  = Fun;
 		pThread->pData 		  = pData;
+		pThread->nCancelMode  = 1;
+		pThread->nExecuteMode = nExecuteMode;
+		pThread->nLoopSecond  = nLoopSecond;
 		if (pthread_create(&pThread->thId, &pThread->thAttribute, DefaultExecuteMode, (void *)pThread) == 0)
 		{
 			return pThread;

@@ -69,14 +69,10 @@ int ReleaseDBConnPool(DBConnPool *pConnPool)
 		ReleaseThread(pConnPool->pFreeOvertimeConn);
 	}
 
-	LockQueue(&pConnPool->dbConnList);
-
 	/*遍历队列列表*/
 	BeginTraveData(&pConnPool->dbConnList);
 		ReleaseDBConnNode((DBConnNode *)pData);
 	EndTraveData();
-
-	UnlockQueue(&pConnPool->dbConnList);
 
 	ReleaseQueue(&pConnPool->dbConnList);
 

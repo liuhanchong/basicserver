@@ -28,7 +28,7 @@ typedef struct Thread
 	pthread_attr_t thAttribute;//线程属性
 } Thread;
 
-#define RESUMETHREAD(pThread)  \
+#define RESUMETHREAD(pThread) \
 		{ \
 			while (1) \
 			{ \
@@ -46,8 +46,8 @@ typedef struct Thread
 					pthread_testcancel(); \
 				}
 
-#define SUSPENDTHREAD(pThread) 	\
-				/*解锁资源 并将线程挂起*/ \
+#define SUSPENDTHREAD(pThread) \
+				/*解锁并将线程挂起*/ \
 		 		pthread_mutex_unlock((&(pThread->thMutex))); \
 		 		pthread_testcancel(); \
 		 		PauseThread(pThread); \
@@ -87,6 +87,6 @@ void SetThreadExecute(Thread *pThread, void *(*Fun)(void *), void *pData);
 void *DefaultExecuteMode(void *pData);
 int SetCancelMode(int nMode);
 void ReleaseResource(void *pData);
-Thread *CreateThread(void *(*Fun)(void *), void *pData);
+Thread *CreateThread(void *(*Fun)(void *), void *pData, int nExecuteMode, int nLoopSecond);
 
 #endif /* BASICCOMPONENT_THREAD_H_ */
