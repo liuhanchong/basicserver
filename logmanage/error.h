@@ -103,6 +103,9 @@
 #define ERROR_CRESHAMEM  ("创建共享内存失败")
 #define ERROR_SERISRUN   ("服务器已启动")
 #define ERROR_SERNORUN   ("服务器未启动")
+<<<<<<< HEAD
+>>>>>>> parent of b5f84a3... 添加调试信息
+=======
 >>>>>>> parent of b5f84a3... 添加调试信息
 
 void DebugInfor(char *pDebug); /*鍦ㄨ皟璇曟椂锛屾墦鍗扮殑涓�簺杩愯鏃朵俊鎭紝褰撶増鏈彂甯冩椂鍊欙紝姝ゅ嚱鏁拌緭鍑虹殑淇℃伅浼氳灞忚斀*/

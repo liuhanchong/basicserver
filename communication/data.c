@@ -111,6 +111,9 @@ int ReleaseData()
 	{
 		ErrorInfor("ReleaseData-3", ERROR_RELPOOL);
 	}
+<<<<<<< HEAD
+>>>>>>> parent of b5f84a3... 添加调试信息
+=======
 >>>>>>> parent of b5f84a3... 添加调试信息
 
 	/*閬嶅巻闃熷垪鍒楄〃*/
@@ -127,6 +130,7 @@ int ReleaseData()
 	// 	ReleaseDataNode((DataNode *)pData);
 	// EndTraveData();
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 	// printf("12\n");
 
@@ -168,6 +172,13 @@ int ReleaseData()
 	// 	ReleaseThread(data.pProSendThread);
 	// }
 
+=======
+	if (ReleaseQueue(&data.sendDataList) == 0)
+	{
+		ErrorInfor("ReleaseData-2", ERROR_RELQUEUE);
+	}
+
+>>>>>>> parent of b5f84a3... 添加调试信息
 =======
 	if (ReleaseQueue(&data.sendDataList) == 0)
 	{
