@@ -84,37 +84,7 @@ int InitData()
 
 int ReleaseData()
 {
-<<<<<<< HEAD
 	printf("10\n");
-=======
-	if (data.pProRecvThread)
-	{
-		ReleaseThread(data.pProRecvThread);
-	}
-
-	if (data.pProSendThread)
-	{
-		ReleaseThread(data.pProSendThread);
-	}
-
-	if (ReleaseThreadPool(&data.recvThreadPool) == 0)
-	{
-		ErrorInfor("ReleaseData-1", ERROR_RELPOOL);
-	}
-
-	if (ReleaseThreadPool(&data.sendThreadPool) == 0)
-	{
-		ErrorInfor("ReleaseData-2", ERROR_RELPOOL);
-	}
-
-	if (ReleaseDBConnPool(&data.dbConnPool) == 0)
-	{
-		ErrorInfor("ReleaseData-3", ERROR_RELPOOL);
-	}
-<<<<<<< HEAD
->>>>>>> parent of b5f84a3... 添加调试信息
-=======
->>>>>>> parent of b5f84a3... 添加调试信息
 
 	/*閬嶅巻闃熷垪鍒楄〃*/
 	BeginTraveData(&data.recvDataList);
@@ -130,8 +100,6 @@ int ReleaseData()
 	// 	ReleaseDataNode((DataNode *)pData);
 	// EndTraveData();
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 	// printf("12\n");
 
 	// if (ReleaseQueue(&data.sendDataList) == 0)
@@ -172,20 +140,12 @@ int ReleaseData()
 	// 	ReleaseThread(data.pProSendThread);
 	// }
 
-=======
+
 	if (ReleaseQueue(&data.sendDataList) == 0)
 	{
 		ErrorInfor("ReleaseData-2", ERROR_RELQUEUE);
 	}
 
->>>>>>> parent of b5f84a3... 添加调试信息
-=======
-	if (ReleaseQueue(&data.sendDataList) == 0)
-	{
-		ErrorInfor("ReleaseData-2", ERROR_RELQUEUE);
-	}
-
->>>>>>> parent of b5f84a3... 添加调试信息
 	return 1;
 }
 
