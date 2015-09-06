@@ -84,7 +84,9 @@ int InitData()
 
 int ReleaseData()
 {
+
 	printf("10\n");
+
 
 	/*閬嶅巻闃熷垪鍒楄〃*/
 	BeginTraveData(&data.recvDataList);
@@ -100,12 +102,6 @@ int ReleaseData()
 	// 	ReleaseDataNode((DataNode *)pData);
 	// EndTraveData();
 
-	// printf("12\n");
-
-	// if (ReleaseQueue(&data.sendDataList) == 0)
-	// {
-	// 	ErrorInfor("ReleaseData-2", ERROR_RELQUEUE);
-	// }
 
 	printf("7\n");
 
