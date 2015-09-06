@@ -84,31 +84,6 @@ int InitData()
 
 int ReleaseData()
 {
-	if (ReleaseDBConnPool(&data.dbConnPool) == 0)
-	{
-		ErrorInfor("ReleaseData-3", ERROR_RELPOOL);
-	}
-
-	/*閬嶅巻闃熷垪鍒楄〃*/
-	BeginTraveData(&data.recvDataList);
-		ReleaseDataNode((DataNode *)pData);
-	EndTraveData();
-
-	if (ReleaseQueue(&data.recvDataList) == 0)
-	{
-		ErrorInfor("ReleaseData-1", ERROR_RELQUEUE);
-	}
-
-	BeginTraveData(&data.sendDataList);
-		ReleaseDataNode((DataNode *)pData);
-	EndTraveData();
-
-	if (ReleaseQueue(&data.sendDataList) == 0)
-	{
-		ErrorInfor("ReleaseData-2", ERROR_RELQUEUE);
-	}
-
-	return 1;
 }
 
 void ReleaseDataNode(DataNode *pNode)
