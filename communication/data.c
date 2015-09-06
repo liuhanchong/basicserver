@@ -84,26 +84,6 @@ int InitData()
 
 int ReleaseData()
 {
-	if (data.pProRecvThread)
-	{
-		ReleaseThread(data.pProRecvThread);
-	}
-
-	if (data.pProSendThread)
-	{
-		ReleaseThread(data.pProSendThread);
-	}
-
-	if (ReleaseThreadPool(&data.recvThreadPool) == 0)
-	{
-		ErrorInfor("ReleaseData-1", ERROR_RELPOOL);
-	}
-
-	if (ReleaseThreadPool(&data.sendThreadPool) == 0)
-	{
-		ErrorInfor("ReleaseData-2", ERROR_RELPOOL);
-	}
-
 	if (ReleaseDBConnPool(&data.dbConnPool) == 0)
 	{
 		ErrorInfor("ReleaseData-3", ERROR_RELPOOL);
