@@ -84,8 +84,30 @@ int InitData()
 
 int ReleaseData()
 {
+	if (data.pProRecvThread)
+	{
+		ReleaseThread(data.pProRecvThread);
+	}
 
-	printf("10\n");
+	if (data.pProSendThread)
+	{
+		ReleaseThread(data.pProSendThread);
+	}
+
+	if (ReleaseThreadPool(&data.recvThreadPool) == 0)
+	{
+		ErrorInfor("ReleaseData-1", ERROR_RELPOOL);
+	}
+
+	if (ReleaseThreadPool(&data.sendThreadPool) == 0)
+	{
+		ErrorInfor("ReleaseData-2", ERROR_RELPOOL);
+	}
+
+	if (ReleaseDBConnPool(&data.dbConnPool) == 0)
+	{
+		ErrorInfor("ReleaseData-3", ERROR_RELPOOL);
+	}
 
 
 	/*閬嶅巻闃熷垪鍒楄〃*/
@@ -98,44 +120,9 @@ int ReleaseData()
 		ErrorInfor("ReleaseData-1", ERROR_RELQUEUE);
 	}
 
-	// BeginTraveData(&data.sendDataList);
-	// 	ReleaseDataNode((DataNode *)pData);
-	// EndTraveData();
-
-
-	printf("7\n");
-
-	if (ReleaseThreadPool(&data.recvThreadPool) == 0)
-	{
-		ErrorInfor("ReleaseData-1", ERROR_RELPOOL);
-	}
-
-	printf("8\n");
-
-	// if (ReleaseThreadPool(&data.sendThreadPool) == 0)
-	// {
-	// 	ErrorInfor("ReleaseData-2", ERROR_RELPOOL);
-	// }
-
-	printf("9\n");
-
-	if (ReleaseDBConnPool(&data.dbConnPool) == 0)
-	{
-		ErrorInfor("ReleaseData-3", ERROR_RELPOOL);
-	}
-
-	if (data.pProRecvThread)
-	{
-		ReleaseThread(data.pProRecvThread);
-	}
-
-	printf("6\n");
-
-	// if (data.pProSendThread)
-	// {
-	// 	ReleaseThread(data.pProSendThread);
-	// }
-
+	BeginTraveData(&data.sendDataList);
+		ReleaseDataNode((DataNode *)pData);
+	EndTraveData();
 
 	if (ReleaseQueue(&data.sendDataList) == 0)
 	{
