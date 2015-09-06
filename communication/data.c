@@ -84,6 +84,51 @@ int InitData()
 
 int ReleaseData()
 {
+	if (data.pProRecvThread)
+	{
+		ReleaseThread(data.pProRecvThread);
+	}
+
+	if (data.pProSendThread)
+	{
+		ReleaseThread(data.pProSendThread);
+	}
+
+	if (ReleaseThreadPool(&data.recvThreadPool) == 0)
+	{
+		ErrorInfor("ReleaseData-1", ERROR_RELPOOL);
+	}
+
+	if (ReleaseThreadPool(&data.sendThreadPool) == 0)
+	{
+		ErrorInfor("ReleaseData-2", ERROR_RELPOOL);
+	}
+
+	if (ReleaseDBConnPool(&data.dbConnPool) == 0)
+	{
+		ErrorInfor("ReleaseData-3", ERROR_RELPOOL);
+	}
+
+	/*遍历队列列表*/
+	BeginTraveData(&data.recvDataList);
+		ReleaseDataNode((DataNode *)pData);
+	EndTraveData();
+
+	if (ReleaseQueue(&data.recvDataList) == 0)
+	{
+		ErrorInfor("ReleaseData-1", ERROR_RELQUEUE);
+	}
+
+	BeginTraveData(&data.sendDataList);
+		ReleaseDataNode((DataNode *)pData);
+	EndTraveData();
+
+	if (ReleaseQueue(&data.sendDataList) == 0)
+	{
+		ErrorInfor("ReleaseData-2", ERROR_RELQUEUE);
+	}
+
+	return 1;
 }
 
 void ReleaseDataNode(DataNode *pNode)
