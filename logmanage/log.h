@@ -1,23 +1,24 @@
 /*
  * log.h
  *
- *  Created on: 2015Äê9ÔÂ6ÈÕ
+ *  Created on: 2015ï¿½ï¿½9ï¿½ï¿½6ï¿½ï¿½
  *      Author: liuhanchong
  */
 
 #ifndef LOGMANAGE_LOG_H_
 #define LOGMANAGE_LOG_H_
 
+#include <sys/syslimits.h>
 #include <stdlib.h>
 #include "../basiccomponent/queue.h"
 #include "../poolmanage/threadpool.h"
 #include "error.h"
 
-/*ÈÕÖ¾¼¶±ğ
- * 1 debug		  µ÷ÊÔĞÅÏ¢
- * 2 log 		  Êä³öµÄÈÕÖ¾
- * 3 error 		  ´íÎóĞÅÏ¢
- * 4 system error ÏµÍ³ĞÅÏ¢
+/*é”™è¯¯çº§åˆ«
+ * 1 debug		  è°ƒè¯•ä¿¡æ¯
+ * 2 log 		  è¾“å‡ºçš„æ—¥å¿—
+ * 3 error 		  é”™è¯¯ä¿¡æ¯
+ * 4 system error ç³»ç»Ÿä¿¡æ¯
  * */
 
 #define LOG_LEVEL 4
@@ -36,18 +37,19 @@ typedef struct Log
 	int nMaxLogListLength;
 	Thread *pProLogThread;
 	int nProLogLoopSpace;
-	FILE *pFileArray[LOG_LEVEL] = {0};
-	char *pLevelName[LOG_LEVEL] = {"debug", "log", "error", "syserror"};
+	FILE *pFileArray[LOG_LEVEL];
+	char *pLevelName[LOG_LEVEL];
 } Log;
 
-struct Log log;
+static Log sysLog;
 
 int InitLog();
 int ReleaseLog();
 int WriteLog(char *pText, int nType);
+int ReleaseLogNode(LogNode *pLogNode);
 
 void *ProcessLog(void *pData);
-void *Write(void *pData);
+void *WriteFile(void *pData);
 FILE *GetFile(int nType);
 
 #endif /* LOGMANAGE_LOG_H_ */

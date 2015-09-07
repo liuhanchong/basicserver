@@ -4,13 +4,16 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../logmanage/error.c 
+../logmanage/error.c \
+../logmanage/log.c 
 
 OBJS += \
-./logmanage/error.o 
+./logmanage/error.o \
+./logmanage/log.o 
 
 C_DEPS += \
-./logmanage/error.d 
+./logmanage/error.d \
+./logmanage/log.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

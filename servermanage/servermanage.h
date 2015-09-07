@@ -1,7 +1,7 @@
 /*
  * servermanage.h
  *
- *  Created on: 2015Äê8ÔÂ10ÈÕ
+ *  Created on: 2015ï¿½ï¿½8ï¿½ï¿½10ï¿½ï¿½
  *      Author: liuhanchong
  */
 
@@ -11,6 +11,7 @@
 #include <sys/shm.h>
 #include "../logmanage/error.h"
 #include "../communication/socket.h"
+#include "../logmanage/log.h"
 
 #define KEY 0x19900510
 
@@ -29,11 +30,11 @@ typedef struct Server
 
 static Server server;
 
-/*½Ó¿Ú*/
+/*ï¿½Ó¿ï¿½*/
 int Start(int nSize, char **aArgArray);
 void ProcessMessage();
 
-/*Ë½ÓÐ*/
+/*Ë½ï¿½ï¿½*/
 int StartServer();
 int StopServer();
 int RestartServer();

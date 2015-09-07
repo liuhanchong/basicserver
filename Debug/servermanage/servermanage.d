@@ -8,7 +8,8 @@ servermanage/servermanage.d: ../servermanage/servermanage.c \
   ../servermanage/../communication/data.h \
   ../servermanage/../communication/../poolmanage/threadpool.h \
   ../servermanage/../communication/../poolmanage/dbconnpool.h \
-  ../servermanage/../communication/../poolmanage/../basiccomponent/dbcore.h
+  ../servermanage/../communication/../poolmanage/../basiccomponent/dbcore.h \
+  ../servermanage/../logmanage/log.h
 
 ../servermanage/servermanage.h:
 
@@ -31,3 +32,5 @@ servermanage/servermanage.d: ../servermanage/servermanage.c \
 ../servermanage/../communication/../poolmanage/dbconnpool.h:
 
 ../servermanage/../communication/../poolmanage/../basiccomponent/dbcore.h:
+
+../servermanage/../logmanage/log.h:

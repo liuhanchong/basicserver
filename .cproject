@@ -20,7 +20,7 @@
 							<targetPlatform id="cdt.managedbuild.target.gnu.platform.macosx.exe.debug.679022287" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.macosx.exe.debug"/>
 							<builder buildPath="${workspace_loc:/basicserver}/Debug" id="cdt.managedbuild.target.gnu.builder.macosx.exe.debug.443107755" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.macosx.exe.debug"/>
 							<tool id="cdt.managedbuild.tool.macosx.c.linker.macosx.exe.debug.1264227611" name="MacOS X C Linker" superClass="cdt.managedbuild.tool.macosx.c.linker.macosx.exe.debug">
-								<option id="macosx.c.link.option.other.149835515" superClass="macosx.c.link.option.other" valueType="stringList">
+								<option id="macosx.c.link.option.other.149835515" name="Other options (-Xlinker [option])" superClass="macosx.c.link.option.other" valueType="stringList">
 									<listOptionValue builtIn="false" value="-L/usr/local/mysql/lib -lmysqlclient"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.macosx.c.linker.input.692715378" superClass="cdt.managedbuild.tool.macosx.c.linker.input">
