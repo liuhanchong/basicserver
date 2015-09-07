@@ -1,4 +1,14 @@
 eclipse.preferences.version=1
+encoding//basiccomponent/ini.c=UTF-8
+encoding//basiccomponent/queue.c=UTF-8
+encoding//basiccomponent/thread.h=UTF-8
+encoding//communication/aiox.c=UTF-8
 encoding//communication/data.c=UTF-8
+encoding//communication/socket.c=UTF-8
 encoding//logmanage/error.h=UTF-8
 encoding//logmanage/log.c=UTF-8
+encoding//poolmanage/dbconnpool.c=UTF-8
+encoding//poolmanage/dbconnpool.h=UTF-8
+encoding//poolmanage/threadpool.c=UTF-8
+encoding//poolmanage/threadpool.h=UTF-8
+encoding//servermanage/servermanage.c=UTF-8

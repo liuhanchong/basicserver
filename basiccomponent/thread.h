@@ -47,7 +47,7 @@ typedef struct Thread
 				}
 
 #define SUSPENDTHREAD(pThread) \
-				/*解锁并将线程挂起*/ \
+				/*解锁资源 并将线程挂起*/ \
 		 		pthread_mutex_unlock((&(pThread->thMutex))); \
 		 		pthread_testcancel(); \
 		 		PauseThread(pThread); \

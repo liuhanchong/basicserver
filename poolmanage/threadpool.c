@@ -25,14 +25,14 @@ int CreateThreadPool(ThreadPool *pThreadQueue, int *pTaskQueueLength)
 	pThreadQueue->nMaxThreadNumber = GetInt(&ini, "POOLNUMBER", "MaxThreadNumber", 99);
 	pThreadQueue->nCoreThreadNumber = GetInt(&ini, "POOLNUMBER", "CoreThreadNumber", 29);
 
-	pThreadQueue->nAccOverTime = GetInt(&ini, "ACCOVERTIME", "AccOverTime", 1700);/*线程未使用时间超时*/
-	pThreadQueue->nAccThreadLoopSpace = GetInt(&ini, "ACCOVERTIME", "AccThreadLoopSpace", 500);/*超时访问线程时候的判断间隔*/
+	pThreadQueue->nAccOverTime = GetInt(&ini, "ACCOVERTIME", "AccOverTime", 1700);
+	pThreadQueue->nAccThreadLoopSpace = GetInt(&ini, "ACCOVERTIME", "AccThreadLoopSpace", 500);
 
-	pThreadQueue->nAddThreadNumber = GetInt(&ini, "ADDTHREAD", "AddThreadNumber", 4);/*增加线程时候增加的个数*/
-	pThreadQueue->nAddThreadLoopSpace = GetInt(&ini, "ADDTHREAD", "AddThreadLoopSpace", 50);/*增加线程时候的判断间隔*/
+	pThreadQueue->nAddThreadNumber = GetInt(&ini, "ADDTHREAD", "AddThreadNumber", 4);
+	pThreadQueue->nAddThreadLoopSpace = GetInt(&ini, "ADDTHREAD", "AddThreadLoopSpace", 50);
 
-	pThreadQueue->nExeThreadOverTime = GetInt(&ini, "EXEOVERTIME", "ExeThreadOverTime", 170);/*执行线程的时间超时*/
-	pThreadQueue->nExeThreadLoopSpace = GetInt(&ini, "EXEOVERTIME", "ExeThreadLoopSpace", 9);/*执行线程的判断间隔*/
+	pThreadQueue->nExeThreadOverTime = GetInt(&ini, "EXEOVERTIME", "ExeThreadOverTime", 170);
+	pThreadQueue->nExeThreadLoopSpace = GetInt(&ini, "EXEOVERTIME", "ExeThreadLoopSpace", 9);
 
 	ReleaseIni(&ini);
 
@@ -190,7 +190,6 @@ int ExecuteTask(ThreadPool *pThreadQueue, void *(*Fun)(void *), void *pData)
 		return 0;
 	}
 
-	/*遍历队列列表*/
 	int nReturn = 0;
 	LockQueue(&pThreadQueue->threadList);
 

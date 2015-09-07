@@ -1,7 +1,7 @@
 /*
  * data.c
  *
- *  Created on: 2015骞�鏈�鏃�
+ *  Created on: 2015年9月4日
  *      Author: liuhanchong
  */
 
@@ -16,10 +16,10 @@ int InitData()
 		return 0;
 	}
 
-	data.nMaxRecvListLen = GetInt(&ini, "DATANUMBER", "MaxRecvListLen", 999); /*鏈�ぇ澶勭悊鏁版嵁鏁伴噺*/
-	data.nMaxSendListLen = GetInt(&ini, "DATANUMBER", "MaxSendListLen", 999); /*鏈�ぇ澶勭悊鏁版嵁鏁伴噺*/
-	data.nProRecvDataLoopSpace = GetInt(&ini, "DATANUMBER", "ProRecvDataLoopSpace", 1); /*澶勭悊鏁版嵁鏃堕棿闂撮殧*/
-	data.nProSendDataLoopSpace = GetInt(&ini, "DATANUMBER", "ProSendDataLoopSpace", 1); /*澶勭悊鏁版嵁鏃堕棿闂撮殧*/
+	data.nMaxRecvListLen = GetInt(&ini, "DATANUMBER", "MaxRecvListLen", 999);
+	data.nMaxSendListLen = GetInt(&ini, "DATANUMBER", "MaxSendListLen", 999);
+	data.nProRecvDataLoopSpace = GetInt(&ini, "DATANUMBER", "ProRecvDataLoopSpace", 1);
+	data.nProSendDataLoopSpace = GetInt(&ini, "DATANUMBER", "ProSendDataLoopSpace", 1);
 
 	ReleaseIni(&ini);
 
@@ -86,7 +86,6 @@ int ReleaseData()
 {
 	printf("10\n");
 
-	/*閬嶅巻闃熷垪鍒楄〃*/
 	BeginTraveData(&data.recvDataList);
 		ReleaseDataNode((DataNode *)pData);
 	EndTraveData();
@@ -177,7 +176,7 @@ void *ProcessRecvData(void *pData)
 	QueueNode *pQueueNode = (QueueNode *)GetNodeForIndex(&data.recvDataList, 0);
 	if (pQueueNode)
 	{
-		/*姝ゅ鍒嗛厤鐨刣atanode鍐呭瓨绌洪棿闇�鎵ц鐨勭嚎绋嬪嚱鏁拌繘琛岄攢姣�/
+		/*此处分配的datanode内存空间需要执行的线程函数进行销毁*/
 		if (ExecuteTask(&data.recvThreadPool, TestData, pQueueNode->pData) == 1)
 		{
 			DeleteForNode(&data.recvDataList, pQueueNode);
@@ -196,7 +195,7 @@ void *ProcessSendData(void *pData)
 	QueueNode *pQueueNode = (QueueNode *)GetNodeForIndex(&data.sendDataList, 0);
 	if (pQueueNode)
 	{
-		/*姝ゅ鍒嗛厤鐨刣atanode鍐呭瓨绌洪棿闇�鎵ц鐨勭嚎绋嬪嚱鏁拌繘琛岄攢姣�/
+		/*此处分配的datanode内存空间需要执行的线程函数进行销毁*/
 		if (ExecuteTask(&data.sendThreadPool, TestData, pQueueNode->pData) == 1)
 		{
 			DeleteForNode(&data.sendDataList, pQueueNode);
@@ -221,7 +220,7 @@ int InsertDataNode(int nSocket, void *pData, int nDataSize, int nType)
 	pDataNode->nSocket = nSocket;
 	pDataNode->nDataSize = nDataSize;
 
-	/*鎻掑叆鏁版嵁澶勭悊闃熷垪*/
+	/*插入数据处理队列*/
 	if (nType == 1)
 	{
 		LockQueue(&data.recvDataList);
@@ -264,7 +263,7 @@ void *TestData(void *pData)
 			}
 			else
 			{
-				printf("娌℃湁绌洪棽鐨勮繛鎺n");
+				printf("没有空闲的连接\n");
 			}
 		}
 

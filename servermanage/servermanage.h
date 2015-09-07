@@ -1,7 +1,7 @@
 /*
  * servermanage.h
  *
- *  Created on: 2015å¹´8æœˆ10æ—¥
+ *  Created on: 2015Äê8ÔÂ10ÈÕ
  *      Author: liuhanchong
  */
 
@@ -29,11 +29,11 @@ typedef struct Server
 
 static Server server;
 
-/*æ¥å£*/
+/*½Ó¿Ú*/
 int Start(int nSize, char **aArgArray);
 void ProcessMessage();
 
-/*ç§æœ‰*/
+/*Ë½ÓĞ*/
 int StartServer();
 int StopServer();
 int RestartServer();

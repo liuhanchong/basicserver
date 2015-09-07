@@ -25,8 +25,8 @@ int CreateDBConnPool(DBConnPool *pConnPool)
 	pConnPool->nMaxConnNumber = GetInt(&ini, "POOLNUMBER", "MaxConnNumber", 99);
 	pConnPool->nCoreConnNumber = GetInt(&ini, "POOLNUMBER", "CoreConnNumber", 29);
 
-	pConnPool->nAccOverTime = GetInt(&ini, "ACCOVERTIME", "AccOverTime", 1700);/*连接未使用时间超时*/
-	pConnPool->nAccConnLoopSpace = GetInt(&ini, "ACCOVERTIME", "AccConnLoopSpace", 500);/*超时访问连接时候的判断间隔*/
+	pConnPool->nAccOverTime = GetInt(&ini, "ACCOVERTIME", "AccOverTime", 1700);
+	pConnPool->nAccConnLoopSpace = GetInt(&ini, "ACCOVERTIME", "AccConnLoopSpace", 500);
 
 	pConnPool->nAddConnNumber = GetInt(&ini, "ADDTHREAD", "AddConnNumber", 4);
 

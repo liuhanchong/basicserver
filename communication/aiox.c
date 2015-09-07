@@ -43,7 +43,6 @@ int CreateAio(AioX *pAio, int nMaxAioQueueLength, int nLoopSpace, int nMaxBuffer
 		return 0;
 	}
 
-	/*初始化DATA处理*/
 	if (InitData() == 0)
 	{
 		ReleaseAio(pAio);
@@ -112,7 +111,6 @@ int ReleaseAio(AioX *pAio)
 
 	printf("5\n");
 
-	/*释放data模块*/
 	if (ReleaseData() == 0)
 	{
 		ErrorInfor("ReleaseAio", ERROR_RELEDATA);
@@ -185,10 +183,10 @@ int Read(int nAioId, int nMaxBufferLength, struct kevent *event)
 		return 0;
 	}
 
-	/*获取信息*/
+	/*接收信息*/
 	int nDataSize = recv(event->ident, pData, nMaxBufferLength, 0);
 
-	//错误信息或对方关闭了套接字
+	//读取信息错误 或对方关闭了套接字
 	if (nDataSize == -1 || nDataSize == 0)
 	{
 		SystemErrorInfor("Read-1");

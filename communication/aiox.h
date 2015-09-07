@@ -1,7 +1,7 @@
 /*
  * aiox.h
  *
- *  Created on: 2015å¹´9æœˆ4æ—¥
+ *  Created on: 2015Äê9ÔÂ4ÈÕ
  *      Author: liuhanchong
  */
 
@@ -19,12 +19,12 @@ typedef struct AioX
 {
 	struct kevent *pEvnetQueue;
 	int nMaxAioQueueLength;
-	int nAioId;/*ä¿å­˜epoll/kqueueäº‹ä»¶å¥æŸ„*/
+	int nAioId;/*±£´æepoll/kqueueÊÂ¼ş¾ä±ú*/
 	Thread *pProAioThread;
 	int nMaxBufferLength;
 } AioX;
 
-/*æ¥å£*/
+/*½Ó¿Ú*/
 int CreateAio(AioX *pAio, int nMaxAioQueueLength, int nLoopSpace, int nMaxBufferLength);
 int ControlAio(int nQueueId, struct kevent *event);
 int RemoveEvent(int nQueueId, int nFd, int nFilter);
@@ -33,7 +33,7 @@ int ModifyEvent(int nQueueId, int nFd, int nFilter, void *pData);
 struct kevent GetEvent(int fd, int nFilter, int nFlags, void *pData);
 int ReleaseAio(AioX *pAio);
 
-/*ç§æœ‰*/
+/*Ë½ÓĞ*/
 void *ProcessAio(void *pData);
 int Read(int nAioId, int nMaxBufferLength, struct kevent *event);
 int Write(struct kevent *event);

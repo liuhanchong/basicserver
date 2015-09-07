@@ -1,7 +1,7 @@
 /*
  * queue.h
  *
- *  Created on: 2015å¹´9æœˆ3æ—¥
+ *  Created on: 2015Äê9ÔÂ3ÈÕ
  *      Author: liuhanchong
  */
 
@@ -21,7 +21,7 @@ typedef struct QueueNode
 	struct QueueNode *pPre;
 } QueueNode;
 
-/*å¾ªç¯é“¾è¡¨*/
+/*Ñ­»·Á´±í*/
 typedef struct List
 {
 	int nCurQueueLen;
@@ -31,7 +31,7 @@ typedef struct List
 	int nOpenPrio;
 } List;
 
-/*éå†èŠ‚ç‚¹*/
+/*±éÀú½Úµã*/
 #define BeginTraveNode(list) \
 		{\
 			int nIndex = 0; \
@@ -48,7 +48,7 @@ typedef struct List
 			} \
 		}
 
-/*éå†æ•°æ®*/
+/*±éÀúÊı¾İ*/
 #define BeginTraveData(list) \
 			BeginTraveNode(list) \
 				void *pData = pQueueNode->pData; \
@@ -59,7 +59,7 @@ typedef struct List
 				} \
 			EndTraveNode()
 
-/*é”ä½é“¾è¡¨*/
+/*Ëø×¡Á´±í*/
 #define LockQueue(list) \
 { \
 	if (!(list)) \
@@ -72,7 +72,7 @@ typedef struct List
 	pthread_testcancel(); \
 	pthread_mutex_lock(&((list)->thMutex)); \
 
-/*è§£é”é“¾è¡¨*/
+/*½âËøÁ´±í*/
 #define UnlockQueue(list) \
 	if (!(list)) \
 	{ \
@@ -83,7 +83,7 @@ typedef struct List
 	pthread_cleanup_pop(0); \
 } \
 
-/*æ¥å£*/
+/*½Ó¿Ú*/
 int InitQueue(List *list, int nMaxLen, int nOpenPrio);
 int ReleaseQueue(List *list);
 int GetCurQueueLen(List *list);

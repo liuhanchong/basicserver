@@ -23,8 +23,8 @@ int Create(int nDomain, int nType, int nProt, int nPort, const char *pIp)
 		return 0;
 	}
 
-	serverSocket.nAccOutTime = GetInt(&ini, "ACCOVERTIME", "AccOutTime", 9); /*线程未使用时间超时*/
-	serverSocket.nAccOutTimeThreadLoopSpace = GetInt(&ini, "ACCOVERTIME", "AccOutTimeThreadLoopSpace", 49); /*超时访问线程时候的判断间隔*/
+	serverSocket.nAccOutTime = GetInt(&ini, "ACCOVERTIME", "AccOutTime", 9);
+	serverSocket.nAccOutTimeThreadLoopSpace = GetInt(&ini, "ACCOVERTIME", "AccOutTimeThreadLoopSpace", 49);
 	serverSocket.nMaxAcceptSocketNumber = GetInt(&ini, "SOCKETNUMBER", "MaxAcceptSocketNumber", 99);
 	serverSocket.nAccThreadLoopSpace = GetInt(&ini, "ACCSOCKET", "AccThreadLoopSpace", 0);
 	int nMaxAioQueueLength = GetUInt(&ini, "AIO", "MaxAioQueueLength", 99);
@@ -155,7 +155,6 @@ int Close(int nSocket)
 
 	printf("3\n");
 
-	/*遍历队列列表*/
 	BeginTraveData(&serverSocket.socketList);
 		ReleaseSocketNode((SocketNode *)pData);
 	EndTraveData();

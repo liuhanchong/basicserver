@@ -1,7 +1,7 @@
 /*
  * socket.h
  *
- *  Created on: 2015å¹´9æœˆ4æ—¥
+ *  Created on: 2015Äê9ÔÂ4ÈÕ
  *      Author: liuhanchong
  */
 
@@ -32,7 +32,7 @@ typedef struct Socket
 	List socketList;
 	int nAccThreadLoopSpace;
 	int nAccOutTime;
-	int nAccOutTimeThreadLoopSpace;/*çº¿ç¨‹æœªä½¿ç”¨çš„åˆ¤æ–­é—´éš”*/
+	int nAccOutTimeThreadLoopSpace;/*³õÊ¼»¯µÄbuffer³¤¶È*/
 	int nServerSocket;
 	Thread *pAccThread;
 	Thread *pOutTimeThread;
@@ -42,14 +42,14 @@ typedef struct Socket
 
 static Socket serverSocket;
 
-/*æ¥å£*/
+/*½Ó¿Ú*/
 int Create(int nDomain, int nType, int nProtocol, int nPort, const char *pIp);
 int Listen(int nSocket, int nQueSize);
 int Accept(int nSocket);
 int Close(int nSocket);
 void ReleaseSocketNode(SocketNode *pNode);
 
-/*ç§æœ‰*/
+/*Ë½ÓĞ*/
 void *AcceptSocket(void *pData);
 void *FreeOutTimeSocket(void *pData);
 

@@ -114,19 +114,5 @@ int WriteLog(Log *pLog, char *pText, int nType)
 
 void *ProcessLog(void *pData)
 {
-	LockQueue(&data.recvDataList);
-
-	QueueNode *pQueueNode = (QueueNode *)GetNodeForIndex(&data.recvDataList, 0);
-	if (pQueueNode)
-	{
-		/*姝ゅ鍒嗛厤鐨刣atanode鍐呭瓨绌洪棿闇�鎵ц鐨勭嚎绋嬪嚱鏁拌繘琛岄攢姣�/
-		if (ExecuteTask(&data.recvThreadPool, TestData, pQueueNode->pData) == 1)
-		{
-			DeleteForNode(&data.recvDataList, pQueueNode);
-		}
-	}
-
-	UnlockQueue(&data.recvDataList);
-
 	return NULL;
 }
