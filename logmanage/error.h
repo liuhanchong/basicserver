@@ -65,6 +65,7 @@
 #define ERROR_CRESIGNAL  ("创建信号失败")
 #define ERROR_INITLOG    ("初始化LOG失败")
 #define ERROR_RELLOG     ("释放LOG失败")
+#define ERROR_GETFILE    ("获取文件失败")
 
 void DebugInfor(char *pDebug); /*在调试时，打印的一些运行时信息，当版本发布时候，此函数输出的信息会被屏蔽*/
 void LogInfor(char *pLog); /*日常运行情况的记录*/
