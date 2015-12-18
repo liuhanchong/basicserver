@@ -1,7 +1,7 @@
 /*
  * data.h
  *
- *  Created on: 2015Äê9ÔÂ4ÈÕ
+ *  Created on: 2015ï¿½ï¿½9ï¿½ï¿½4ï¿½ï¿½
  *      Author: liuhanchong
  */
 
@@ -40,19 +40,19 @@ typedef struct Data
 
 static Data data;
 
-/*½Ó¿Ú*/
+/*æ¥å£*/
 int InitData();
 int ReleaseData();
 void ReleaseDataNode(DataNode *pNode);
 int InsertRecvDataNode(int nSocket, void *pData, int nDataSize);
 int InsertSendDataNode(int nSocket, void *pData, int nDataSize);
 
-/*Ë½ÓĞ*/
+/*ç§æœ‰*/
 void *ProcessRecvData(void *pData);
 void *ProcessSendData(void *pData);
 int InsertDataNode(int nSocket, void *pData, int nDataSize, int nType);
 
-/*²âÊÔ*/
+/*æµ‹è¯•*/
 void *TestData(void *pData);
 
 #endif /* COMMUNICATION_DATA_H_ */

@@ -87,11 +87,11 @@ void ProcessMessage()
 
 int StartServer()
 {
-	if (InitLog() != 1)
-	{
-		ErrorInfor("StartServer", ERROR_INITLOG);
-		return 0;
-	}
+//	if (InitLog() != 1)
+//	{
+//		ErrorInfor("StartServer", ERROR_INITLOG);
+//		return 0;
+//	}
 
 	Ini ini;
 	if (InitIni(&ini, "../ini/servermanage.ini", 200) != 1)
@@ -148,11 +148,11 @@ int StopServer()
 	{
 		ErrorInfor("StopServer", ERROR_STOP);
 	}
-
-	if (ReleaseLog() != 1)
-	{
-		ErrorInfor("StartServer", ERROR_RELLOG);
-	}
+//
+//	if (ReleaseLog() != 1)
+//	{
+//		ErrorInfor("StartServer", ERROR_RELLOG);
+//	}
 
 	return 1;
 }

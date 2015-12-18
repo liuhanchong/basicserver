@@ -44,7 +44,7 @@ int ReleaseQueue(List *list)
 
 	if (pthread_mutex_destroy(&list->thMutex) != 0)
 	{
-		 SystemErrorInfor("ReleaseQueue");
+		SystemErrorInfor("ReleaseQueue");
 		return 0;
 	}
 

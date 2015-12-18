@@ -5,8 +5,8 @@
  *      Author: liuhanchong
  */
 
-#ifndef HEADER_SERVERMANAGE_H_
-#define HEADER_SERVERMANAGE_H_
+#ifndef SERVERMANAGE_SERVERMANAGE_H_
+#define SERVERMANAGE_SERVERMANAGE_H_
 
 #include <sys/shm.h>
 #include "../logmanage/error.h"

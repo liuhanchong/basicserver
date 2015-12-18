@@ -30,8 +30,8 @@ void ErrorInfor(char *pFunctionName, char *pError)
 {
 	if (pFunctionName && pError)
 	{
-//		printf("Error: %s-%s!\n", pFunctionName, pError);
-		WriteLog(pError, 3);
+		printf("Error: %s-%s!\n", pFunctionName, pError);
+//		WriteLog(pError, 3);
 	}
 }
 
@@ -40,6 +40,6 @@ void SystemErrorInfor(char *pFunctionName)
 	if (pFunctionName)
 	{
 		printf("SystemError: %s-%s!\n", pFunctionName, strerror(errno));
-		WriteLog(strerror(errno), 4);
+//		WriteLog(strerror(errno), 4);
 	}
 }

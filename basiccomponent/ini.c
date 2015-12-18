@@ -30,15 +30,6 @@ int InitIni(Ini *pIni, char *chPath, int nRowMaxLength)
 		return 0;
 	}
 
-	pIni->pText = (char *)malloc(nRowMaxLength);
-	if (!pIni->pText)
-	{
-		SystemErrorInfor("InitIni-3");
-		fclose(pFile);
-		free(pIni->pPath);
-		return 0;
-	}
-
 	pIni->pFile = pFile;
 	memcpy(pIni->pPath, chPath, strlen(chPath));
 	pIni->nRowMaxLength = nRowMaxLength;
@@ -86,22 +77,13 @@ char *GetString(Ini *pIni, char *pSection, char *pKey, char *pDef)
 
 	FindValue(pIni, pSection, pKey, pValue, pIni->nRowMaxLength);
 
-	if (strlen(pValue) > 0)
+	if (strlen(pValue) <= 0)
 	{
 		int nSize = strlen(pValue);
-		memcpy(pIni->pText, pValue, nSize);
-		pIni->pText[nSize] = '\0';
-	}
-	else
-	{
-		memset(pIni->pText, 0, pIni->nRowMaxLength);
-		memcpy(pIni->pText, pDef, strlen(pDef));
+		memcpy(pValue, pDef, strlen(pDef));
 	}
 
-	free(pValue);
-	pValue = NULL;
-
-	return pIni->pText;
+	return pValue;
 }
 
 int GetInt(Ini *pIni, char *pSection, char *pKey, int nDefault)

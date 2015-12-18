@@ -1,7 +1,7 @@
 /*
  * dbcore.h
  *
- *  Created on: 2015Äê9ÔÂ3ÈÕ
+ *  Created on: 2015å¹´9æœˆ3æ—¥
  *      Author: liuhanchong
  */
 
@@ -32,8 +32,7 @@
 			ReleaseRecordResult(pResult); \
 		}
 
-
-//½Ó¿Ú
+//æ¥å£
 MYSQL *OpenDB(char *pHost, char *pUser, char *pPasswd, char *pDB, char *pUnixSocket, unsigned long lClientFlag, unsigned int nPort);
 int ExecuteSelect(MYSQL *pMySql, char *sSql);
 int ExecuteModify(MYSQL *pMySql, char *sSql);

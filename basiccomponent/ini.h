@@ -1,7 +1,7 @@
 /*
  * ini.h
  *
- *  Created on: 2015Äê9ÔÂ3ÈÕ
+ *  Created on: 2015å¹´9æœˆ3æ—¥
  *      Author: liuhanchong
  */
 
@@ -16,11 +16,10 @@ typedef struct Ini
 {
 	FILE *pFile;
 	char *pPath;
-	char *pText;
 	int nRowMaxLength;
 } Ini;
 
-/*½Ó¿Ú*/
+/*æ¥å£*/
 int InitIni(Ini *pIni, char *chPath, int nRowMaxLength);
 const char *GetPathName(Ini *pIni);
 char *GetStringEx(Ini *pIni, char *pSection, char *pKey, char *pDef);
@@ -32,7 +31,7 @@ void GetArray(Ini *pIni, char *pSection, char *pKey, char **pArray, int nLen);
 int GetBool(Ini *pIni, char *pSection, char *pKey, int nDefault);
 void ReleaseIni(Ini *pIni);
 
-/*Ë½ÓĞ*/
+/*ç§æœ‰*/
 void FindValue(Ini *pIni, char *pSection, char *pKey, char *pValue, int nSize);
 int FindSection(char *pSection,  char *pValue);
 int FindKey(char *pKey, char *pValue);
